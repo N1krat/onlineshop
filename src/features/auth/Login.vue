@@ -38,12 +38,12 @@
 
 <script> 
 import Navbar from '../../widgets/NavbarMain.vue'
-
+import axios from 'axios';
 export default {
     name: "LoginPage",
     components: {
         Navbar
-    }
+    },
 }
 </script>
 
