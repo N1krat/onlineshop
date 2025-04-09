@@ -11,7 +11,7 @@ This project is a online electronics shop where we will have such functionality 
 To-Do: 
 - Creating a file system ✅
 - Creating a basic design for the website ✅
-- Creating the HomePage
+- Creating the HomePage ✅
 - Creating the Registration/LogIn page ✅
 - Creating a backend
 - Creating a DB ✅
