@@ -1,5 +1,5 @@
 <template>
-    <Navbar />
+    <Navbar/>
     <div class="flex justify-center items-center h-screen">
       <div class="w-full max-w-xs">
         <form @submit.prevent="loginUser" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
@@ -37,7 +37,7 @@
   </template>
   
   <script> 
-  import Navbar from '../../widgets/NavbarMain.vue'
+  import Navbar from '../../widgets/NavbarReg.vue'
   import axios from 'axios';
   
   export default {

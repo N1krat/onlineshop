@@ -108,7 +108,7 @@
       </div>
 
       <div class="mostPopular mt-10 mx-4">
-          <h2 class="text-5xl font-bold mx-20">Our Most Popular Products</h2>
+          <h2 class="text-5xl font-bold mx-20 mb-40">Our Most Popular Products</h2>
 
           <div class="popularProductsMain">
           
@@ -251,7 +251,7 @@ export default {
 .section2 {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    grid-template-rows: repeat(3, 1fr);
+    grid-template-rows: repeat(2, 1fr);
     padding: 10px;
     margin-top: 5px;
     margin-right: 10vh;
