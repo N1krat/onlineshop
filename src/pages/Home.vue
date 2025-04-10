@@ -47,8 +47,8 @@
       </div>
 
       <!-- New products -->
-      <div class="section2 mt-20 mx-4">
-        <div class="newProducts px-3 flex justify-between items-center">
+      <div class="section2 mt-3 mx-3">
+        <div class="newProducts px-2 flex justify-between items-center">
           <h1 class="text-5xl">New Products</h1>
           <router-link to="/" class="seeMoreLink">See More</router-link>
         </div>
@@ -105,9 +105,10 @@
 
         </div>
 
+      </div>
 
-        <div class="mostPopular mt-20 mx-4">
-          <h2 class="text-4xl font-bold">Our Most Popular Products</h2>
+      <div class="mostPopular mt-10 mx-4">
+          <h2 class="text-5xl font-bold mx-20 mb-40">Our Most Popular Products</h2>
 
           <div class="popularProductsMain">
           
@@ -163,8 +164,6 @@
   
 
         </div>
-    
-      </div>
       
       <footer class="mt-20">
         
@@ -201,7 +200,7 @@ export default {
     gap: 15px;
     padding: 10px;
     color: white;
-    margin-top: 10vh;
+    margin-top: 5vh;
     margin-right: 10vh;
     margin-left: 10vh;
 }
@@ -252,10 +251,9 @@ export default {
 .section2 {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    grid-template-rows: repeat(3, 1fr);
-    gap: 15px;
+    grid-template-rows: repeat(2, 1fr);
     padding: 10px;
-    margin-top: 10vh;
+    margin-top: 5px;
     margin-right: 10vh;
     margin-left: 10vh;
 }
@@ -283,11 +281,6 @@ export default {
     gap: 1vw;
 }
 
-.nextProduct {
-    grid-column: span 4 / span 4;
-    grid-row-start: 3;
-    background-color: rgb(169, 104, 25);
-}
         
 
 body {
@@ -319,6 +312,17 @@ body {
 }
 
 /* popular products */
+.popularProductsMain {
+    grid-column: span 4 / span 4;
+    grid-row-start: 2;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1vw;
+    margin-top: 20px;
+}
+
+
 
 /* footer */
 
@@ -353,3 +357,4 @@ footer {
         
 
 </style>
+
