@@ -3,6 +3,7 @@ import HomePage from '../pages/Home.vue'
 import LoginPage from '../features/auth/Login.vue'
 import RegistrationPage from '../features/auth/Register.vue'
 import CataloguePage from '../pages/Catalogue.vue'
+import UserPage from '../pages/User.vue'
 
 const routes = [
     {
@@ -25,6 +26,11 @@ const routes = [
         name: 'Register',
         component: RegistrationPage
     },
+    { 
+        path: '/user',
+        name: 'User',
+        component: UserPage
+    }
 ]; 
 
 const router = createRouter({

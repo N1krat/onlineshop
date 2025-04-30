@@ -27,7 +27,7 @@
         <div class="flex items-center justify-between">
           <button 
             class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" 
-            type="submit" onclick="window.location.href = '/login'">
+            type="submit">
             Sign Up
           </button>
         </div>
@@ -58,7 +58,9 @@ export default {
           username: this.username,
           password: this.password
         });
+        localStorage.setItem("user", JSON.stringify({ username: this.username }));
         console.log("Upload successful:", response.data);
+        this.$router.push("/user");
       } catch (error) {
         console.error("Error:", error);
       }
