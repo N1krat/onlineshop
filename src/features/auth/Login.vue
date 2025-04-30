@@ -65,7 +65,7 @@
           alert("Login Successful!");
           
           // Redirect to homepage or dashboard
-          this.$router.push("/");
+          this.$router.push("/user");
         } catch (error) {
           this.errorMessage = error.response?.data || "Login failed";
         }
