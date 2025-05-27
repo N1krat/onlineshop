@@ -13,19 +13,19 @@
             <h3 class="sr-only">Categories</h3>
             <ul role="list" class="px-2 py-3 font-medium text-gray-900">
               <li>
-                <a href="#" class="block px-2 py-3">Totes</a>
+                <a href="#" class="block px-2 py-3">Laptops</a>
               </li>
               <li>
-                <a href="#" class="block px-2 py-3">Backpacks</a>
+                <a href="#" class="block px-2 py-3">Phones</a>
               </li>
               <li>
-                <a href="#" class="block px-2 py-3">Travel Bags</a>
+                <a href="#" class="block px-2 py-3">Headphones</a>
               </li>
               <li>
-                <a href="#" class="block px-2 py-3">Hip Bags</a>
+                <a href="#" class="block px-2 py-3">Chargers</a>
               </li>
               <li>
-                <a href="#" class="block px-2 py-3">Laptop Sleeves</a>
+                <a href="#" class="block px-2 py-3">Accessories</a>
               </li>
             </ul>
 
@@ -128,7 +128,7 @@
               <h3 class="-mx-2 -my-3 flow-root">
                 <!-- Expand/collapse section button -->
                 <button type="button" class="flex w-full items-center justify-between bg-white px-2 py-3 text-gray-400 hover:text-gray-500" aria-controls="filter-section-mobile-1" aria-expanded="false">
-                  <span class="font-medium text-gray-900">Category</span>
+                  <span class="font-medium text-gray-900">CPU</span>
                   <span class="ml-6 flex items-center">
                     <!-- Expand icon, show/hide based on section open state. -->
                     <svg class="size-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon">
@@ -154,7 +154,7 @@
                         </svg>
                       </div>
                     </div>
-                    <label for="filter-mobile-category-0" class="min-w-0 flex-1 text-gray-500">New Arrivals</label>
+                    <label for="filter-mobile-category-0" class="min-w-0 flex-1 text-gray-500">M4</label>
                   </div>
                   <div class="flex gap-3">
                     <div class="flex h-5 shrink-0 items-center">
@@ -166,7 +166,7 @@
                         </svg>
                       </div>
                     </div>
-                    <label for="filter-mobile-category-1" class="min-w-0 flex-1 text-gray-500">Sale</label>
+                    <label for="filter-mobile-category-1" class="min-w-0 flex-1 text-gray-500">M3</label>
                   </div>
                   <div class="flex gap-3">
                     <div class="flex h-5 shrink-0 items-center">
@@ -178,7 +178,7 @@
                         </svg>
                       </div>
                     </div>
-                    <label for="filter-mobile-category-2" class="min-w-0 flex-1 text-gray-500">Travel</label>
+                    <label for="filter-mobile-category-2" class="min-w-0 flex-1 text-gray-500">M2</label>
                   </div>
                   <div class="flex gap-3">
                     <div class="flex h-5 shrink-0 items-center">
@@ -190,19 +190,7 @@
                         </svg>
                       </div>
                     </div>
-                    <label for="filter-mobile-category-3" class="min-w-0 flex-1 text-gray-500">Organization</label>
-                  </div>
-                  <div class="flex gap-3">
-                    <div class="flex h-5 shrink-0 items-center">
-                      <div class="group grid size-4 grid-cols-1">
-                        <input id="filter-mobile-category-4" name="category[]" value="accessories" type="checkbox" class="col-start-1 row-start-1 appearance-none rounded-sm border border-gray-300 bg-white checked:border-indigo-600 checked:bg-indigo-600 indeterminate:border-indigo-600 indeterminate:bg-indigo-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:checked:bg-gray-100 forced-colors:appearance-auto">
-                        <svg class="pointer-events-none col-start-1 row-start-1 size-3.5 self-center justify-self-center stroke-white group-has-disabled:stroke-gray-950/25" viewBox="0 0 14 14" fill="none">
-                          <path class="opacity-0 group-has-checked:opacity-100" d="M3 8L6 11L11 3.5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                          <path class="opacity-0 group-has-indeterminate:opacity-100" d="M3 7H11" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                        </svg>
-                      </div>
-                    </div>
-                    <label for="filter-mobile-category-4" class="min-w-0 flex-1 text-gray-500">Accessories</label>
+                    <label for="filter-mobile-category-3" class="min-w-0 flex-1 text-gray-500">M1</label>
                   </div>
                 </div>
               </div>
@@ -237,7 +225,7 @@
                         </svg>
                       </div>
                     </div>
-                    <label for="filter-mobile-size-0" class="min-w-0 flex-1 text-gray-500">2L</label>
+                    <label for="filter-mobile-size-0" class="min-w-0 flex-1 text-gray-500">16inch</label>
                   </div>
                   <div class="flex gap-3">
                     <div class="flex h-5 shrink-0 items-center">
@@ -249,7 +237,7 @@
                         </svg>
                       </div>
                     </div>
-                    <label for="filter-mobile-size-1" class="min-w-0 flex-1 text-gray-500">6L</label>
+                    <label for="filter-mobile-size-1" class="min-w-0 flex-1 text-gray-500">15inch</label>
                   </div>
                   <div class="flex gap-3">
                     <div class="flex h-5 shrink-0 items-center">
@@ -261,7 +249,7 @@
                         </svg>
                       </div>
                     </div>
-                    <label for="filter-mobile-size-2" class="min-w-0 flex-1 text-gray-500">12L</label>
+                    <label for="filter-mobile-size-2" class="min-w-0 flex-1 text-gray-500">14inch</label>
                   </div>
                   <div class="flex gap-3">
                     <div class="flex h-5 shrink-0 items-center">
@@ -273,31 +261,7 @@
                         </svg>
                       </div>
                     </div>
-                    <label for="filter-mobile-size-3" class="min-w-0 flex-1 text-gray-500">18L</label>
-                  </div>
-                  <div class="flex gap-3">
-                    <div class="flex h-5 shrink-0 items-center">
-                      <div class="group grid size-4 grid-cols-1">
-                        <input id="filter-mobile-size-4" name="size[]" value="20l" type="checkbox" class="col-start-1 row-start-1 appearance-none rounded-sm border border-gray-300 bg-white checked:border-indigo-600 checked:bg-indigo-600 indeterminate:border-indigo-600 indeterminate:bg-indigo-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:checked:bg-gray-100 forced-colors:appearance-auto">
-                        <svg class="pointer-events-none col-start-1 row-start-1 size-3.5 self-center justify-self-center stroke-white group-has-disabled:stroke-gray-950/25" viewBox="0 0 14 14" fill="none">
-                          <path class="opacity-0 group-has-checked:opacity-100" d="M3 8L6 11L11 3.5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                          <path class="opacity-0 group-has-indeterminate:opacity-100" d="M3 7H11" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                        </svg>
-                      </div>
-                    </div>
-                    <label for="filter-mobile-size-4" class="min-w-0 flex-1 text-gray-500">20L</label>
-                  </div>
-                  <div class="flex gap-3">
-                    <div class="flex h-5 shrink-0 items-center">
-                      <div class="group grid size-4 grid-cols-1">
-                        <input id="filter-mobile-size-5" name="size[]" value="40l" type="checkbox" class="col-start-1 row-start-1 appearance-none rounded-sm border border-gray-300 bg-white checked:border-indigo-600 checked:bg-indigo-600 indeterminate:border-indigo-600 indeterminate:bg-indigo-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:checked:bg-gray-100 forced-colors:appearance-auto">
-                        <svg class="pointer-events-none col-start-1 row-start-1 size-3.5 self-center justify-self-center stroke-white group-has-disabled:stroke-gray-950/25" viewBox="0 0 14 14" fill="none">
-                          <path class="opacity-0 group-has-checked:opacity-100" d="M3 8L6 11L11 3.5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                          <path class="opacity-0 group-has-indeterminate:opacity-100" d="M3 7H11" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                        </svg>
-                      </div>
-                    </div>
-                    <label for="filter-mobile-size-5" class="min-w-0 flex-1 text-gray-500">40L</label>
+                    <label for="filter-mobile-size-3" class="min-w-0 flex-1 text-gray-500">13inch</label>
                   </div>
                 </div>
               </div>
