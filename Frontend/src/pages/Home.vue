@@ -5,41 +5,61 @@
     <!-- main pagul propriuzis -->
     <!-- Main collections -->
     <div class="section1">
-        <div class="newCol p-4">
-            <h1 class="text-6xl">New Collection</h1>
+        <div class="newCol p-3">
+            <h1 class="text-6xl">New Devices</h1>
             <p class="text-l" id="p1">Spring</p>
             <p class="text-l" id="p2">2025</p>
         </div>
 
-        <div class="colImages">
-            <div class="image">
-                <img
-                    src="/public/image.png"
-                    alt="placeholder image"
-                    class="w-full h-full object-cover"
-                />
+        <div class="overflow-hidden mainImages">
+            <div ref="carousel" class=" flex transition-transform duration-300 ease-in-out">
+                <div class="colImages min-w-1/2 px-2">
+                <div class="image">
+                    <img src="../assets/images/iphone16.png" alt="placeholder image" class="w-full h-full object-cover" />
+                </div>
+                </div>
+                <div class="colImages min-w-1/2 px-2">
+                <div class="image h-[270px]">
+                    <img src="../assets/images/macbook.jpg" alt="placeholder image" class="w-full h-full object-cover" />
+                </div>
+                </div>
+                <!-- Repeat 4 more times (total 6) -->
+                <div class="colImages min-w-1/2 px-2">
+                <div class="image">
+                    <img src="../assets/images/iphone16.png" alt="placeholder image" class="w-full h-full object-cover" />
+                </div>
+                </div>
+                <div class="colImages min-w-1/2 px-2">
+                <div class="image">
+                    <img src="../assets/images/macbook.jpg" alt="placeholder image" class="w-full h-full object-cover" />
+                </div>
+                </div>
+                <div class="colImages min-w-1/2 px-2">
+                <div class="image">
+                    <img src="../assets/images/iphone16.png" alt="placeholder image" class="w-full h-full object-cover" />
+                </div>
+                </div>
+                <div class="colImages min-w-1/2 px-2">
+                <div class="image">
+                    <img src="../assets/images/macbook.jpg" alt="placeholder image" class="w-full h-full object-cover" />
+                </div>
+                </div>
             </div>
         </div>
 
-        <div class="colImages">
-            <div class="image">
-                <img
-                    src="/public/image.png"
-                    alt="placeholder image"
-                    class="w-full h-full object-cover"
-                />
-            </div>
-        </div>
+
+
+    
 
         <div class="newcolButtons">
-            <div class="buttons p-2">
+            <div class="buttons inline-flex space-x-3">
                 <button
-                    class="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-1 px-3 border border-gray-400 rounded shadow"
+                    @click="goToShop" class="bg-white mr-20 hover:bg-gray-100 text-gray-800 font-semibold py-1 px-3 border border-gray-400 rounded shadow"
                 >
-                    Go To Shop
+                    <span class="mr-5">Go To Shop</span>
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
-                        class="h-6 w-6"
+                        class="h-5 w-5"
                         fill="none"
                         viewBox="0 0 24 24"
                         stroke="currentColor"
@@ -55,6 +75,7 @@
 
                 <button
                     class="bg-transparent hover:bg-gray-500 text-gray-700 font-semibold hover:text-white py-2 px-4 border border-gray-500 hover:border-transparent rounded"
+                    @click="prevSlide"
                 >
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -71,6 +92,7 @@
                 </button>
                 <button
                     class="bg-transparent hover:bg-gray-500 text-gray-700 font-semibold hover:text-white py-2 px-4 border border-gray-500 hover:border-transparent rounded"
+                    @click="nextSlide"
                 >
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -90,30 +112,30 @@
     </div>
 
     <!-- New products -->
-    <div class="section2 mt-3 mx-3">
-        <div class="newProducts px-2 flex justify-between items-center">
-            <h1 class="text-5xl">New Products</h1>
+    <div class="section2 mb-10">
+        <div class="newProducts px-1 flex justify-between items-center mb-2">
+            <h1 class="text-4xl">New Products</h1>
             <router-link to="/" class="seeMoreLink">See More</router-link>
         </div>
 
-        <div class="newProductsMain">
+        <div class="newProductsMain" style="margin-top: -12vh">
             <div class="w-full max-w-sm rounded-lg dark:border-gray-700">
-                <a href="#">
+                <router-link to="/catalogue">
                     <img
                         class="p-8 rounded-t-lg bg-gray-50"
                         src="https://flowbite.com/docs/images/products/apple-watch.png"
                         alt="product image"
                     />
-                </a>
-                <div class="px-5 pb-5">
-                    <a href="#">
+                </router-link>
+                <div class="px-5 pb-5 pt-4">
+                    <router-link to="/catalogue">
                         <h5
                             class="text-xl font-semibold tracking-tight text-black dark:text-black"
                         >
                             Apple Watch Series 7 GPS, Aluminium Case, Starlight
                             Sport
                         </h5>
-                    </a>
+                    </router-link>
                     <br />
                     <div class="flex items-center justify-between">
                         <span
@@ -130,22 +152,22 @@
             </div>
 
             <div class="w-full max-w-sm rounded-lg dark:border-gray-700">
-                <a href="#">
+                <router-link to="/catalogue">
                     <img
                         class="p-8 rounded-t-lg bg-gray-50"
                         src="https://flowbite.com/docs/images/products/apple-watch.png"
                         alt="product image"
                     />
-                </a>
+                </router-link>
                 <div class="px-5 pb-5">
-                    <a href="#">
+                    <router-link to="/catalogue">
                         <h5
                             class="text-xl font-semibold tracking-tight text-black dark:text-black"
                         >
                             Apple Watch Series 7 GPS, Aluminium Case, Starlight
                             Sport
                         </h5>
-                    </a>
+                    </router-link>
                     <br />
                     <div class="flex items-center justify-between">
                         <span
@@ -195,12 +217,12 @@
         </div>
     </div>
 
-    <div class="mostPopular mt-10 mx-4">
+    <div class="mostPopular mt-30 mx-4">
         <h2 class="text-5xl font-bold mx-20 mb-40">
             Our Most Popular Products
         </h2>
 
-        <div class="popularProductsMain">
+        <div class="popularProductsMain" style="margin-top: -12vh">
             <div class="w-full max-w-sm rounded-lg dark:border-gray-700">
                 <a href="#">
                     <img
@@ -288,11 +310,11 @@
                             class="text-3xl font-bold text-black dark:text-black"
                             >$599</span
                         >
-                        <a
+                        <button @click="adaugaProdus"
                             href="#"
                             class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                            >Add to cart</a
-                        >
+                            >Add to cart
+                        </button>
                     </div>
                 </div>
             </div>
@@ -300,12 +322,12 @@
     </div>
 
     <footer class="mt-20">
-        <div class="footerDivs p-5">
-            <div class="info text-xl">Info</div>
-            <div class="links">Email</div>
-            <div class="contact text-xl">Contact</div>
+        <div class="footerDivs p-6">
+            <div class="info text-xl p-3">Info</div>
+            <div class="links text-xl p-3">Email</div>
+            <div class="contact text-xl p-3">Contact</div>
             <div class="logo">
-                <span class="text-xl">Our brand</span>
+                <span class="text-xl p-3">Our brand</span>
             </div>
         </div>
     </footer>
@@ -320,11 +342,15 @@ export default {
         Navbar,
     },
 };
+
+
 </script>
 
 <script setup>
-import { useCartStore } from "../features/stores/cart";
+import { ref, onMounted, onBeforeUnmount } from "vue";
+import { useCartStore } from "../features/stores/cart.js";
 
+// Cart logic
 const cart = useCartStore();
 
 function stergeProdus(id) {
@@ -344,24 +370,56 @@ function adaugaProdus() {
     console.log("+cart");
     cart.addToCart(produs);
 }
+
+
+const carousel = ref(null);
+let currentIndex = 0;
+
+const prevSlide = () => {
+  if (currentIndex > 0) {
+    currentIndex--;
+    updateCarouselPosition();
+  }
+};
+
+const nextSlide = () => {
+  const maxIndex = 6 - 2; // total slides - visible items
+  if (currentIndex < maxIndex) {
+    currentIndex++;
+    updateCarouselPosition();
+  }
+};
+
+const updateCarouselPosition = () => {
+  const slideWidth = carousel.value.offsetWidth / 2; // because min-w-1/2
+  carousel.value.style.transform = `translateX(-${currentIndex * slideWidth}px)`;
+};
+
+
+function goToShop() { 
+    window.location.href = "/catalogue";
+}
 </script>
+
+
 <style>
 /* section1 */
 .section1 {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: repeat(3, 1fr);
+    grid-template-columns: 1fr 2fr; /* Two columns: text/buttons on the left, images on the right */
+    grid-template-rows: auto auto auto; /* Define three rows */
     gap: 15px;
     padding: 10px;
     color: white;
-    margin-top: 5vh;
+    margin-top: 1vh;
     margin-right: 10vh;
     margin-left: 10vh;
 }
 
 .newCol {
     color: rgb(67, 67, 67);
-    grid-row: span 2 / span 2;
+    grid-column: 1; /* Place in the first column */
+    grid-row: 1 / span 2; /* Spanning two rows */
     padding-bottom: 100px;
 }
 
@@ -379,23 +437,16 @@ function adaugaProdus() {
     font-family: "Beatrice Deck Trial", sans-serif;
     font-weight: normal;
 }
-
-.colImages {
-    grid-row: span 3 / span 3;
+.mainImages {
+    grid-column: 2; /* Move images to the right column */
+    grid-row: 1 / span 3;
 }
-
 .newColButtons {
-    background-color: green;
-    grid-row: span 3 / span 3;
-}
-
-.newColButtons {
+    grid-column: 1; /* Place buttons on the left */
+    grid-row: 3; /* Below header and text */
     display: flex;
     align-items: center;
-    grid-row-start: 3;
-    color: black;
 }
-
 .newColButtons button {
     margin-right: 20px;
 }
@@ -406,13 +457,13 @@ function adaugaProdus() {
     grid-template-columns: repeat(4, 1fr);
     grid-template-rows: repeat(2, 1fr);
     padding: 10px;
-    margin-top: 5px;
     margin-right: 10vh;
     margin-left: 10vh;
 }
 
 .newProducts {
     grid-column: span 4 / span 4;
+    
 }
 
 .newProducts h1 {
@@ -501,4 +552,6 @@ footer {
     grid-column-start: 2;
     grid-row-start: 1;
 }
+
+
 </style>
