@@ -18,6 +18,7 @@ db.serialize(() => {
   db.run(`CREATE TABLE IF NOT EXISTS users (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         username TEXT UNIQUE,
+        email TEXT UNIQUE,
         password TEXT
     )`);
 
@@ -26,8 +27,21 @@ db.serialize(() => {
         name TEXT,
         price INTEGER,
         description TEXT,
-        image TEXT
+        image TEXT, 
+        category TEXT, 
+        stock INTEGER, 
+        rating FLOAT,
     )`);
+
+    db.run(` CREATE TABLE IF NOT EXISTS orders (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        user_id INTEGER,
+        product_id INTEGER,
+        quantity INTEGER,
+        FOREIGN KEY (user_id) REFERENCES users(id),
+        FOREIGN KEY (product_id) REFERENCES products(id)
+      
+    `);
 });
 
 app.post("/register", async (req, res) => {

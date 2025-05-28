@@ -13,6 +13,16 @@
             type="text" 
             placeholder="Username">
         </div>
+
+        <div class="mb-6">
+          <label class="block text-gray-700 text-sm font-bold mb-2" for="email">Email</label>
+          <input v-model="email" 
+            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            type="email"
+            placeholder="youremail@example.com">
+          <p v-if="!isValidEmail" class="text-red-500 text-xs italic">Please enter a valid email address.</p>
+        </div>
+
         <div class="mb-6">
           <label class="block text-gray-700 text-sm font-bold mb-2" for="password">
             Password
@@ -48,14 +58,25 @@ export default {
   data() {
     return {
       username: "",
+      email: "", 
       password: ""
     };
+  },
+  computed: {
+    isValidEmail() {
+      const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      return re.test(String(this.email).toLowerCase());
+    }
   },
   methods: {
     async registerUser() {
       try {
+        if (!this.isValidEmail) {
+          return;
+        }
         const response = await axios.post("http://localhost:3000/register", {
           username: this.username,
+          email: this.email,
           password: this.password
         });
         localStorage.setItem("user", JSON.stringify({ username: this.username }));
