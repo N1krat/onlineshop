@@ -1,4 +1,4 @@
-const sqlite = require("sqlite3");
+const Database = require("better-sqlite3");
 const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
@@ -8,28 +8,20 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
-const db = new sqlite.Database("userData.db", (err) => {
-  if (err) {
-    console.log(err);
-  }
-});
+const db = new Database("userData.db");
 
-db.serialize(() => {
-  db.run(`CREATE TABLE IF NOT EXISTS users (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        username TEXT UNIQUE,
-        password TEXT
-    )`);
-
-  db.run(`CREATE TABLE IF NOT EXISTS products (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name TEXT,
-        price INTEGER,
-        description TEXT,
-        image TEXT
-    )`);
-});
-
+db.prepare(`CREATE TABLE IF NOT EXISTS users (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      username TEXT UNIQUE,
+      password TEXT
+  )`).run;
+db.prepare(`CREATE TABLE IF NOT EXISTS products (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      name TEXT,
+      price INTEGER,
+      description TEXT,
+      image TEXT
+  )`).run;
 app.post("/register", async (req, res) => {
   const { username, password } = req.body;
 
@@ -85,6 +77,17 @@ app.post("/login", (req, res) => {
       return res.status(200).send("Login successful");
     },
   );
+});
+
+app.get("/products", (req, res) => {
+  try {
+    const stmt = ds.prepare("SELECT * FROM products");
+    const products = stmt.all();
+    res.json(products);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Database error");
+  }
 });
 const port = process.env.PORT || 3000;
 app.listen(port, () =>

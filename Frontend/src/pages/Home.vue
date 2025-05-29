@@ -1,7 +1,8 @@
 <template>
     <!-- tipa navbar component -->
     <Navbar />
-
+    <ProductList @add-to-cart="addToCart" />
+    <Cart :items="cart" @remove-item="removeFromCart" />
     <!-- main pagul propriuzis -->
     <!-- Main collections -->
     <div class="section1">
@@ -12,49 +13,73 @@
         </div>
 
         <div class="overflow-hidden mainImages">
-            <div ref="carousel" class=" flex transition-transform duration-300 ease-in-out">
+            <div
+                ref="carousel"
+                class="flex transition-transform duration-300 ease-in-out"
+            >
                 <div class="colImages min-w-1/2 px-2">
-                <div class="image">
-                    <img src="../assets/images/iphone16.png" alt="placeholder image" class="w-full h-full object-cover" />
-                </div>
+                    <div class="image">
+                        <img
+                            src="../assets/images/iphone16.png"
+                            alt="placeholder image"
+                            class="w-full h-full object-cover"
+                        />
+                    </div>
                 </div>
                 <div class="colImages min-w-1/2 px-2">
-                <div class="image h-[270px]">
-                    <img src="../assets/images/macbook.jpg" alt="placeholder image" class="w-full h-full object-cover" />
-                </div>
+                    <div class="image h-[270px]">
+                        <img
+                            src="../assets/images/macbook.jpg"
+                            alt="placeholder image"
+                            class="w-full h-full object-cover"
+                        />
+                    </div>
                 </div>
                 <!-- Repeat 4 more times (total 6) -->
                 <div class="colImages min-w-1/2 px-2">
-                <div class="image">
-                    <img src="../assets/images/iphone16.png" alt="placeholder image" class="w-full h-full object-cover" />
-                </div>
-                </div>
-                <div class="colImages min-w-1/2 px-2">
-                <div class="image">
-                    <img src="../assets/images/macbook.jpg" alt="placeholder image" class="w-full h-full object-cover" />
-                </div>
-                </div>
-                <div class="colImages min-w-1/2 px-2">
-                <div class="image">
-                    <img src="../assets/images/iphone16.png" alt="placeholder image" class="w-full h-full object-cover" />
-                </div>
+                    <div class="image">
+                        <img
+                            src="../assets/images/iphone16.png"
+                            alt="placeholder image"
+                            class="w-full h-full object-cover"
+                        />
+                    </div>
                 </div>
                 <div class="colImages min-w-1/2 px-2">
-                <div class="image">
-                    <img src="../assets/images/macbook.jpg" alt="placeholder image" class="w-full h-full object-cover" />
+                    <div class="image">
+                        <img
+                            src="../assets/images/macbook.jpg"
+                            alt="placeholder image"
+                            class="w-full h-full object-cover"
+                        />
+                    </div>
                 </div>
+                <div class="colImages min-w-1/2 px-2">
+                    <div class="image">
+                        <img
+                            src="../assets/images/iphone16.png"
+                            alt="placeholder image"
+                            class="w-full h-full object-cover"
+                        />
+                    </div>
+                </div>
+                <div class="colImages min-w-1/2 px-2">
+                    <div class="image">
+                        <img
+                            src="../assets/images/macbook.jpg"
+                            alt="placeholder image"
+                            class="w-full h-full object-cover"
+                        />
+                    </div>
                 </div>
             </div>
         </div>
 
-
-
-    
-
         <div class="newcolButtons">
             <div class="buttons inline-flex space-x-3">
                 <button
-                    @click="goToShop" class="bg-white mr-20 hover:bg-gray-100 text-gray-800 font-semibold py-1 px-3 border border-gray-400 rounded shadow"
+                    @click="goToShop"
+                    class="bg-white mr-20 hover:bg-gray-100 text-gray-800 font-semibold py-1 px-3 border border-gray-400 rounded shadow"
                 >
                     <span class="mr-5">Go To Shop</span>
                     <svg
@@ -310,10 +335,12 @@
                             class="text-3xl font-bold text-black dark:text-black"
                             >$599</span
                         >
-                        <button @click="adaugaProdus"
+                        <button
+                            @click="adaugaProdus"
                             href="#"
                             class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                            >Add to cart
+                        >
+                            Add to cart
                         </button>
                     </div>
                 </div>
@@ -342,65 +369,72 @@ export default {
         Navbar,
     },
 };
-
-
 </script>
 
 <script setup>
-import { ref, onMounted, onBeforeUnmount } from "vue";
-import { useCartStore } from "../features/stores/cart.js";
+import { ref, onMounted, onBeforeUnmount, watch } from "vue";
+import productList from "../background/productList.vue";
+import Cart from "./Cart.vue";
 
-// Cart logic
-const cart = useCartStore();
+const cart = ref([]);
 
-function stergeProdus(id) {
-    cart.removeItem(id);
+onMounted(() => {
+    const savedCart = localStorage.getItem("cart");
+
+    if (savedCart) {
+        cart.value = JSON.parse(savedCart);
+    }
+});
+
+watch(
+    cart,
+    (newCart) => {
+        localStorage.setItem("cart", JSON.stringify(newCart));
+    },
+    { deep: true },
+);
+
+function addToCart(product) {
+    const existing = cart.value.find((item) => item.id === product.id);
+
+    if (existing) {
+        existing.quantity++;
+    } else {
+        cart.value.push({ ...product, quantity: 1 });
+    }
 }
 
-function golesteCosul() {
-    cart.clearCart();
+function removeFromCart(id) {
+    cart.value = cart.value.filter((item) => item.id !== id);
 }
-
-function adaugaProdus() {
-    const produs = {
-        id: 1,
-        name: "Mouse",
-        price: 100,
-    };
-    console.log("+cart");
-    cart.addToCart(produs);
-}
-
 
 const carousel = ref(null);
 let currentIndex = 0;
 
 const prevSlide = () => {
-  if (currentIndex > 0) {
-    currentIndex--;
-    updateCarouselPosition();
-  }
+    if (currentIndex > 0) {
+        currentIndex--;
+        updateCarouselPosition();
+    }
 };
 
 const nextSlide = () => {
-  const maxIndex = 6 - 2; // total slides - visible items
-  if (currentIndex < maxIndex) {
-    currentIndex++;
-    updateCarouselPosition();
-  }
+    const maxIndex = 6 - 2; // total slides - visible items
+    if (currentIndex < maxIndex) {
+        currentIndex++;
+        updateCarouselPosition();
+    }
 };
 
 const updateCarouselPosition = () => {
-  const slideWidth = carousel.value.offsetWidth / 2; // because min-w-1/2
-  carousel.value.style.transform = `translateX(-${currentIndex * slideWidth}px)`;
+    const slideWidth = carousel.value.offsetWidth / 2; // because min-w-1/2
+    carousel.value.style.transform = `translateX(-${currentIndex * slideWidth}px)`;
 };
 
-
-function goToShop() { 
+function goToShop() {
     window.location.href = "/catalogue";
 }
 </script>
-
 
 <style>
 /* section1 */
@@ -463,7 +497,6 @@ function goToShop() {
 
 .newProducts {
     grid-column: span 4 / span 4;
-    
 }
 
 .newProducts h1 {
@@ -552,6 +585,4 @@ footer {
     grid-column-start: 2;
     grid-row-start: 1;
 }
-
-
 </style>
