@@ -78,8 +78,12 @@
         <div class="newcolButtons">
             <div class="buttons inline-flex space-x-3">
                 <button
+
+                    @click="goToShop" class="bg-white mr-20  hover:bg-gray-100 text-gray-800 font-semibold py-1 px-3 border border-gray-400 rounded shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition ease-in-out duration-300"
+
                     @click="goToShop"
                     class="bg-white mr-20 hover:bg-gray-100 text-gray-800 font-semibold py-1 px-3 border border-gray-400 rounded shadow"
+
                 >
                     <span class="mr-5">Go To Shop</span>
                     <svg
@@ -99,7 +103,7 @@
                 </button>
 
                 <button
-                    class="bg-transparent hover:bg-gray-500 text-gray-700 font-semibold hover:text-white py-2 px-4 border border-gray-500 hover:border-transparent rounded"
+                    class="bg-transparent hover:bg-gray-500 text-gray-700 font-semibold hover:text-white py-2 px-4 border border-gray-500 hover:border-transparent rounded shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition ease-in-out duration-300"
                     @click="prevSlide"
                 >
                     <svg
@@ -116,7 +120,7 @@
                     </svg>
                 </button>
                 <button
-                    class="bg-transparent hover:bg-gray-500 text-gray-700 font-semibold hover:text-white py-2 px-4 border border-gray-500 hover:border-transparent rounded"
+                    class="bg-transparent hover:bg-gray-500 text-gray-700 font-semibold hover:text-white py-2 px-4 border border-gray-500 hover:border-transparent rounded shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition ease-in-out duration-300"
                     @click="nextSlide"
                 >
                     <svg
@@ -136,117 +140,15 @@
         </div>
     </div>
 
-    <!-- New products -->
-    <div class="section2 mb-10">
-        <div class="newProducts px-1 flex justify-between items-center mb-2">
-            <h1 class="text-4xl">New Products</h1>
-            <router-link to="/" class="seeMoreLink">See More</router-link>
+    <div class="mostPopular mb-20 mt-20  mx-20">
+        <div class="flex items-center justify-between">
+            <h2 class="text-5xl font-bold mb-40">
+                New Products
+            </h2>
+            <a href="#" class="hover:underline">See More</a>
         </div>
-
-        <div class="newProductsMain" style="margin-top: -12vh">
-            <div class="w-full max-w-sm rounded-lg dark:border-gray-700">
-                <router-link to="/catalogue">
-                    <img
-                        class="p-8 rounded-t-lg bg-gray-50"
-                        src="https://flowbite.com/docs/images/products/apple-watch.png"
-                        alt="product image"
-                    />
-                </router-link>
-                <div class="px-5 pb-5 pt-4">
-                    <router-link to="/catalogue">
-                        <h5
-                            class="text-xl font-semibold tracking-tight text-black dark:text-black"
-                        >
-                            Apple Watch Series 7 GPS, Aluminium Case, Starlight
-                            Sport
-                        </h5>
-                    </router-link>
-                    <br />
-                    <div class="flex items-center justify-between">
-                        <span
-                            class="text-3xl font-bold text-black dark:text-black"
-                            >$599</span
-                        >
-                        <a
-                            href="#"
-                            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                            >Add to cart</a
-                        >
-                    </div>
-                </div>
-            </div>
-
-            <div class="w-full max-w-sm rounded-lg dark:border-gray-700">
-                <router-link to="/catalogue">
-                    <img
-                        class="p-8 rounded-t-lg bg-gray-50"
-                        src="https://flowbite.com/docs/images/products/apple-watch.png"
-                        alt="product image"
-                    />
-                </router-link>
-                <div class="px-5 pb-5">
-                    <router-link to="/catalogue">
-                        <h5
-                            class="text-xl font-semibold tracking-tight text-black dark:text-black"
-                        >
-                            Apple Watch Series 7 GPS, Aluminium Case, Starlight
-                            Sport
-                        </h5>
-                    </router-link>
-                    <br />
-                    <div class="flex items-center justify-between">
-                        <span
-                            class="text-3xl font-bold text-black dark:text-black"
-                            >$599</span
-                        >
-                        <a
-                            href="#"
-                            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                            >Add to cart</a
-                        >
-                    </div>
-                </div>
-            </div>
-
-            <div class="w-full max-w-sm rounded-lg dark:border-gray-700">
-                <a href="#">
-                    <img
-                        class="p-8 rounded-t-lg bg-gray-50"
-                        src="https://flowbite.com/docs/images/products/apple-watch.png"
-                        alt="product image"
-                    />
-                </a>
-                <div class="px-5 pb-5">
-                    <a href="#">
-                        <h5
-                            class="text-xl font-semibold tracking-tight text-black dark:text-black"
-                        >
-                            Apple Watch Series 7 GPS, Aluminium Case, Starlight
-                            Sport
-                        </h5>
-                    </a>
-                    <br />
-                    <div class="flex items-center justify-between">
-                        <span
-                            class="text-3xl font-bold text-black dark:text-black"
-                            >$599</span
-                        >
-                        <a
-                            href="#"
-                            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                            >Add to cart</a
-                        >
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="mostPopular mt-30 mx-4">
-        <h2 class="text-5xl font-bold mx-20 mb-40">
-            Our Most Popular Products
-        </h2>
-
+        
+        
         <div class="popularProductsMain" style="margin-top: -12vh">
             <div class="w-full max-w-sm rounded-lg dark:border-gray-700">
                 <a href="#">
@@ -273,7 +175,7 @@
                         >
                         <a
                             href="#"
-                            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition ease-in-out duration-300"
                             >Add to cart</a
                         >
                     </div>
@@ -305,7 +207,111 @@
                         >
                         <a
                             href="#"
-                            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition ease-in-out duration-300"
+                            >Add to cart</a
+                        >
+                    </div>
+                </div>
+            </div>
+
+            <div class="w-full max-w-sm rounded-lg dark:border-gray-700">
+                <a href="#">
+                    <img
+                        class="p-8 rounded-t-lg bg-gray-50"
+                        src="https://flowbite.com/docs/images/products/apple-watch.png"
+                        alt="product image"
+                    />
+                </a>
+                <div class="px-5 pb-5">
+                    <a href="#">
+                        <h5
+                            class="text-xl font-semibold tracking-tight text-black dark:text-black"
+                        >
+                            Apple Watch Series 7 GPS, Aluminium Case, Starlight
+                            Sport
+                        </h5>
+                    </a>
+                    <br />
+                    <div class="flex items-center justify-between">
+                        <span
+                            class="text-3xl font-bold text-black dark:text-black"
+                            >$599</span
+                        >
+                        <a
+                            href="#"
+                            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition ease-in-out duration-300"
+                            >Add to cart</a
+                        >
+                      </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mostPopular">
+        <h2 class="text-5xl font-bold mx-20 mb-40">
+            Our Most Popular Products
+        </h2>
+        
+        <div class="popularProductsMain" style="margin-top: -12vh">
+            <div class="w-full max-w-sm rounded-lg dark:border-gray-700">
+                <a href="#">
+                    <img
+                        class="p-8 rounded-t-lg bg-gray-50"
+                        src="https://flowbite.com/docs/images/products/apple-watch.png"
+                        alt="product image"
+                    />
+                </a>
+                <div class="px-5 pb-5">
+                    <a href="#">
+                        <h5
+                            class="text-xl font-semibold tracking-tight text-black dark:text-black"
+                        >
+                            Apple Watch Series 7 GPS, Aluminium Case, Starlight
+                            Sport
+                        </h5>
+                    </a>
+                    <br />
+                    <div class="flex items-center justify-between">
+                        <span
+                            class="text-3xl font-bold text-black dark:text-black"
+                            >$599</span
+                        >
+                        <a
+                            href="#"
+                            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition ease-in-out duration-300"
+                            >Add to cart</a
+                        >
+                    </div>
+                </div>
+            </div>
+
+            <div class="w-full max-w-sm rounded-lg dark:border-gray-700">
+                <a href="#">
+                    <img
+                        class="p-8 rounded-t-lg bg-gray-50"
+                        src="https://flowbite.com/docs/images/products/apple-watch.png"
+                        alt="product image"
+                    />
+                </a>
+                <div class="px-5 pb-5">
+                    <a href="#">
+                        <h5
+                            class="text-xl font-semibold tracking-tight text-black dark:text-black"
+                        >
+                            Apple Watch Series 7 GPS, Aluminium Case, Starlight
+                            Sport
+                        </h5>
+                    </a>
+                    <br />
+                    <div class="flex items-center justify-between">
+                        <span
+                            class="text-3xl font-bold text-black dark:text-black"
+                            >$599</span
+                        >
+                        <a
+                            href="#"
+                            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition ease-in-out duration-300"
                             >Add to cart</a
                         >
                     </div>
@@ -336,6 +342,12 @@
                             >$599</span
                         >
                         <button
+
+                            @click="adaugaProdus()"
+                            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition ease-in-out duration-300"
+                            >Add to cart</button>
+                      </div>
+
                             @click="adaugaProdus"
                             href="#"
                             class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
@@ -343,6 +355,7 @@
                             Add to cart
                         </button>
                     </div>
+
                 </div>
             </div>
         </div>
@@ -372,9 +385,14 @@ export default {
 </script>
 
 <script setup>
+
+import { ref } from "vue";
+import { useCartStore } from "../features/stores/cart.js";
+
 import { ref, onMounted, onBeforeUnmount, watch } from "vue";
 import productList from "../background/productList.vue";
 import Cart from "./Cart.vue";
+
 
 const cart = ref([]);
 
@@ -385,6 +403,21 @@ onMounted(() => {
         cart.value = JSON.parse(savedCart);
     }
 });
+
+function adaugaProdus() {
+    const produs = {
+        id: 1,
+        name: "Mouse",
+        price: 100,
+    };
+
+    localStorage.setItem("cart", JSON.stringify(cart.items));
+    
+    console.log("+cart");
+    cart.addToCart(produs);
+    console.log(cart.items); 
+    alert("Produs adaugat in cos!");
+    
 
 watch(
     cart,
@@ -402,6 +435,7 @@ function addToCart(product) {
     } else {
         cart.value.push({ ...product, quantity: 1 });
     }
+
 }
 
 function removeFromCart(id) {
@@ -427,13 +461,23 @@ const nextSlide = () => {
 };
 
 const updateCarouselPosition = () => {
+
+  const slideWidth = carousel.value.offsetWidth / 2;
+  carousel.value.style.transform = `translateX(-${currentIndex * slideWidth}px)`;
+};
+
+function goToShop() { 
+
     const slideWidth = carousel.value.offsetWidth / 2; // because min-w-1/2
     carousel.value.style.transform = `translateX(-${currentIndex * slideWidth}px)`;
 };
 
 function goToShop() {
+
     window.location.href = "/catalogue";
 }
+
+
 </script>
 
 <style>
@@ -565,7 +609,7 @@ footer {
     font-family: "Beatrice Deck Trial", sans-serif;
     font-weight: normal;
     text-align: center;
-    background-color: beige;
+    background-color: rgb(203, 203, 203);
     width: 100%;
 }
 
