@@ -30,7 +30,7 @@ db.serialize(() => {
         image TEXT, 
         category TEXT, 
         stock INTEGER, 
-        rating FLOAT,
+        rating FLOAT
     )`);
 
     db.run(` CREATE TABLE IF NOT EXISTS orders (
@@ -40,12 +40,11 @@ db.serialize(() => {
         quantity INTEGER,
         FOREIGN KEY (user_id) REFERENCES users(id),
         FOREIGN KEY (product_id) REFERENCES products(id)
-      
-    `);
+    )`);
 });
 
 app.post("/register", async (req, res) => {
-  const { username, password } = req.body;
+  const { username, password, email } = req.body;
 
   if (!username || !password) {
     return res.status(400).send("All fields are required");
@@ -55,8 +54,8 @@ app.post("/register", async (req, res) => {
     hashedPassword = await bcrypt.hash(password, 10);
     db.run(
       `
-            INSERT INTO users (username, password) VALUES (?, ?)`,
-      [username, hashedPassword],
+            INSERT INTO users (username, email, password) VALUES (?, ?, ?)`,
+      [username, email, hashedPassword],
       function (err) {
         if (err) {
           if (err.message.includes("UNIQUE constraint")) {

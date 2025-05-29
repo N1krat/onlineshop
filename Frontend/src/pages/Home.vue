@@ -111,7 +111,7 @@
         </div>
     </div>
 
-    <div class="mostPopular mb-20 mt-20">
+    <div class="mostPopular mb-20 mt-20  mx-20">
         <div class="flex items-center justify-between">
             <h2 class="text-5xl font-bold mb-40">
                 New Products
@@ -368,9 +368,14 @@ function adaugaProdus() {
         name: "Mouse",
         price: 100,
     };
+
+    localStorage.setItem("cart", JSON.stringify(cart.items));
+    
     console.log("+cart");
     cart.addToCart(produs);
     console.log(cart.items); 
+    alert("Produs adaugat in cos!");
+    
 }
 
 
@@ -393,14 +398,15 @@ const nextSlide = () => {
 };
 
 const updateCarouselPosition = () => {
-  const slideWidth = carousel.value.offsetWidth / 2; // because min-w-1/2
+  const slideWidth = carousel.value.offsetWidth / 2;
   carousel.value.style.transform = `translateX(-${currentIndex * slideWidth}px)`;
 };
-
 
 function goToShop() { 
     window.location.href = "/catalogue";
 }
+
+
 </script>
 
 
