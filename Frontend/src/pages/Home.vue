@@ -1,7 +1,8 @@
 <template>
     <!-- tipa navbar component -->
     <Navbar />
-
+    <ProductList @add-to-cart="addToCart" />
+    <Cart :items="cart" @remove-item="removeFromCart" />
     <!-- main pagul propriuzis -->
     <!-- Main collections -->
     <div class="section1">
@@ -12,49 +13,77 @@
         </div>
 
         <div class="overflow-hidden mainImages">
-            <div ref="carousel" class=" flex transition-transform duration-300 ease-in-out">
+            <div
+                ref="carousel"
+                class="flex transition-transform duration-300 ease-in-out"
+            >
                 <div class="colImages min-w-1/2 px-2">
-                <div class="image">
-                    <img src="../assets/images/iphone16.png" alt="placeholder image" class="w-full h-full object-cover" />
-                </div>
+                    <div class="image">
+                        <img
+                            src="../assets/images/iphone16.png"
+                            alt="placeholder image"
+                            class="w-full h-full object-cover"
+                        />
+                    </div>
                 </div>
                 <div class="colImages min-w-1/2 px-2">
-                <div class="image h-[270px]">
-                    <img src="../assets/images/macbook.jpg" alt="placeholder image" class="w-full h-full object-cover" />
-                </div>
+                    <div class="image h-[270px]">
+                        <img
+                            src="../assets/images/macbook.jpg"
+                            alt="placeholder image"
+                            class="w-full h-full object-cover"
+                        />
+                    </div>
                 </div>
                 <!-- Repeat 4 more times (total 6) -->
                 <div class="colImages min-w-1/2 px-2">
-                <div class="image">
-                    <img src="../assets/images/iphone16.png" alt="placeholder image" class="w-full h-full object-cover" />
-                </div>
-                </div>
-                <div class="colImages min-w-1/2 px-2">
-                <div class="image">
-                    <img src="../assets/images/macbook.jpg" alt="placeholder image" class="w-full h-full object-cover" />
-                </div>
-                </div>
-                <div class="colImages min-w-1/2 px-2">
-                <div class="image">
-                    <img src="../assets/images/iphone16.png" alt="placeholder image" class="w-full h-full object-cover" />
-                </div>
+                    <div class="image">
+                        <img
+                            src="../assets/images/iphone16.png"
+                            alt="placeholder image"
+                            class="w-full h-full object-cover"
+                        />
+                    </div>
                 </div>
                 <div class="colImages min-w-1/2 px-2">
-                <div class="image">
-                    <img src="../assets/images/macbook.jpg" alt="placeholder image" class="w-full h-full object-cover" />
+                    <div class="image">
+                        <img
+                            src="../assets/images/macbook.jpg"
+                            alt="placeholder image"
+                            class="w-full h-full object-cover"
+                        />
+                    </div>
                 </div>
+                <div class="colImages min-w-1/2 px-2">
+                    <div class="image">
+                        <img
+                            src="../assets/images/iphone16.png"
+                            alt="placeholder image"
+                            class="w-full h-full object-cover"
+                        />
+                    </div>
+                </div>
+                <div class="colImages min-w-1/2 px-2">
+                    <div class="image">
+                        <img
+                            src="../assets/images/macbook.jpg"
+                            alt="placeholder image"
+                            class="w-full h-full object-cover"
+                        />
+                    </div>
                 </div>
             </div>
         </div>
 
-
-
-    
-
         <div class="newcolButtons">
             <div class="buttons inline-flex space-x-3">
                 <button
+
                     @click="goToShop" class="bg-white mr-20  hover:bg-gray-100 text-gray-800 font-semibold py-1 px-3 border border-gray-400 rounded shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition ease-in-out duration-300"
+
+                    @click="goToShop"
+                    class="bg-white mr-20 hover:bg-gray-100 text-gray-800 font-semibold py-1 px-3 border border-gray-400 rounded shadow"
+
                 >
                     <span class="mr-5">Go To Shop</span>
                     <svg
@@ -313,10 +342,20 @@
                             >$599</span
                         >
                         <button
+
                             @click="adaugaProdus()"
                             class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition ease-in-out duration-300"
                             >Add to cart</button>
                       </div>
+
+                            @click="adaugaProdus"
+                            href="#"
+                            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                        >
+                            Add to cart
+                        </button>
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -343,24 +382,27 @@ export default {
         Navbar,
     },
 };
-
-
 </script>
 
 <script setup>
+
 import { ref } from "vue";
 import { useCartStore } from "../features/stores/cart.js";
 
-// Cart logic
-const cart = useCartStore();
+import { ref, onMounted, onBeforeUnmount, watch } from "vue";
+import productList from "../background/productList.vue";
+import Cart from "./Cart.vue";
 
-function stergeProdus(id) {
-    cart.removeItem(id);
-}
 
-function golesteCosul() {
-    cart.clearCart();
-}
+const cart = ref([]);
+
+onMounted(() => {
+    const savedCart = localStorage.getItem("cart");
+
+    if (savedCart) {
+        cart.value = JSON.parse(savedCart);
+    }
+});
 
 function adaugaProdus() {
     const produs = {
@@ -376,39 +418,67 @@ function adaugaProdus() {
     console.log(cart.items); 
     alert("Produs adaugat in cos!");
     
+
+watch(
+    cart,
+    (newCart) => {
+        localStorage.setItem("cart", JSON.stringify(newCart));
+    },
+    { deep: true },
+);
+
+function addToCart(product) {
+    const existing = cart.value.find((item) => item.id === product.id);
+
+    if (existing) {
+        existing.quantity++;
+    } else {
+        cart.value.push({ ...product, quantity: 1 });
+    }
+
 }
 
+function removeFromCart(id) {
+    cart.value = cart.value.filter((item) => item.id !== id);
+}
 
 const carousel = ref(null);
 let currentIndex = 0;
 
 const prevSlide = () => {
-  if (currentIndex > 0) {
-    currentIndex--;
-    updateCarouselPosition();
-  }
+    if (currentIndex > 0) {
+        currentIndex--;
+        updateCarouselPosition();
+    }
 };
 
 const nextSlide = () => {
-  const maxIndex = 6 - 2; // total slides - visible items
-  if (currentIndex < maxIndex) {
-    currentIndex++;
-    updateCarouselPosition();
-  }
+    const maxIndex = 6 - 2; // total slides - visible items
+    if (currentIndex < maxIndex) {
+        currentIndex++;
+        updateCarouselPosition();
+    }
 };
 
 const updateCarouselPosition = () => {
+
   const slideWidth = carousel.value.offsetWidth / 2;
   carousel.value.style.transform = `translateX(-${currentIndex * slideWidth}px)`;
 };
 
 function goToShop() { 
+
+    const slideWidth = carousel.value.offsetWidth / 2; // because min-w-1/2
+    carousel.value.style.transform = `translateX(-${currentIndex * slideWidth}px)`;
+};
+
+function goToShop() {
+
     window.location.href = "/catalogue";
 }
 
 
 </script>
-
 
 <style>
 /* section1 */
@@ -471,7 +541,6 @@ function goToShop() {
 
 .newProducts {
     grid-column: span 4 / span 4;
-    
 }
 
 .newProducts h1 {
@@ -560,6 +629,4 @@ footer {
     grid-column-start: 2;
     grid-row-start: 1;
 }
-
-
 </style>
