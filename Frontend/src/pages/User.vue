@@ -1,6 +1,6 @@
 <template> 
+<div class="all">
 <Navbar></Navbar>
-
 <div class="main p-12">
     <h2 class="text-3xl">Welcome: {{username}}</h2>
 
@@ -77,7 +77,7 @@
             </div>
         </div>
     </div>
-
+</div>
 </template>
 
 <script>

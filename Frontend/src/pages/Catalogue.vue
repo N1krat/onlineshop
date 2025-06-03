@@ -1,4 +1,5 @@
 <template>
+<div class="all">
 <Navbar></Navbar>
 
 
@@ -601,7 +602,7 @@
         </div>
     </div>
 </div>
-    
+</div> 
 
 </template>
 
