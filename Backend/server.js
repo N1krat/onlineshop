@@ -2,7 +2,7 @@ const Database = require("better-sqlite3");
 const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 
 const app = express();
 app.use(cors());
