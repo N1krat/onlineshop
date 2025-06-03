@@ -48,6 +48,7 @@ app.post("/register", async (req, res) => {
         res.status(201).send("User registered successfully");
       },
     );
+
   } catch (error) {
     res.status(500).send("Error hashing password");
   }
@@ -76,8 +77,8 @@ app.post("/login", (req, res) => {
       if (!passMatch) {
         return res.status(400).send("Invalid password");
       }
-
       return res.status(200).send("Login successful");
+      
     },
   );
 });

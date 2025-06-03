@@ -1,4 +1,5 @@
 <template>
+  <div class="all">
     <Navbar/>
     <div class="flex justify-center items-center h-screen">
       <div class="w-full max-w-xs">
@@ -34,6 +35,7 @@
         </form>
       </div>
     </div>
+  </div>
   </template>
   
   <script> 
@@ -59,17 +61,18 @@
             username: this.username,
             password: this.password
           });
-  
+          const token = res.data.token;
+          localStorage.setItem('token', token);
+          isLoggedIn.value = true;
           localStorage.setItem("user", JSON.stringify({ username: this.username }));
   
           alert("Login Successful!");
-          
-          // Redirect to homepage or dashboard
           this.$router.push("/user");
         } catch (error) {
           this.errorMessage = error.response?.data || "Login failed";
-        }
+        }``
       }
+      
     }
   }
   </script>
