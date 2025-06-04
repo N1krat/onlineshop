@@ -6,7 +6,7 @@
         </div>
 
         <div class="utility p-12 mx-12 mt-6 bg-gray-300 shadow-md shadow-gray-400">
-            <p class="text-2xl font-bold">What will you choose to do?</p>
+            <p class="text-2xl mb-6 font-bold">What will you choose to do?</p>
             
             <div class="adminActions grid grid-rows-1 grid-cols-4 sm:grid-cols-2 md:grid-cols-10">
                 <div></div>
@@ -19,13 +19,13 @@
                 <div class="col-span-3 sm:col-span-2 md:col-span-3">
                     <button @click="$router.push('/admin/orders')" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition ease-in-out duration-300 col-span-1 md:col-span-2">Show Orders</button>
                 </div>
-            </div>
+            </div> 
         </div>
     </nav>
 
     <div class="adminPages p-4 mx-12 mt-6 bg-gray-300 shadow-md shadow-gray-400">
 
-        <router-view />
+        <router-view></router-view>
 
     </div>
 </template>
