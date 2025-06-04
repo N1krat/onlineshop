@@ -1,5 +1,5 @@
 <template>
-  <Navbar></Navbar>
+  <Navbar />
   <div class="flex justify-center items-center h-screen">
     <div class="w-full max-w-xs">
       <form @submit.prevent="registerUser" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
@@ -11,16 +11,21 @@
             v-model="username" 
             class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
             type="text" 
-            placeholder="Username">
+            placeholder="Username"
+          />
         </div>
 
-        <div class="mb-6">
+        <div class="mb-4">
           <label class="block text-gray-700 text-sm font-bold mb-2" for="email">Email</label>
-          <input v-model="email" 
-            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          <input 
+            v-model="email" 
+            :class="['shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline', !isValidEmail && email ? 'border-red-500' : '']"
             type="email"
-            placeholder="youremail@example.com">
-          <p v-if="!isValidEmail" class="text-red-500 text-xs italic">Please enter a valid email address.</p>
+            placeholder="youremail@example.com"
+          />
+          <p v-if="!isValidEmail && email" class="text-red-500 text-xs italic mt-1">
+            Please enter a valid email address.
+          </p>
         </div>
 
         <div class="mb-6">
@@ -29,11 +34,19 @@
           </label>
           <input 
             v-model="password" 
-            class="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline" 
+            :class="['shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-1 leading-tight focus:outline-none focus:shadow-outline', !password && attemptedSubmit ? 'border-red-500' : '']"
             type="password" 
-            placeholder="******************">
-          <p class="text-red-500 text-xs italic">Please choose a password.</p>
+            placeholder="******************"
+          />
+          <p v-if="!password && attemptedSubmit" class="text-red-500 text-xs italic">
+            Please choose a password.
+          </p>
         </div>
+
+        <div v-if="errorMessage" class="mb-4 text-red-500 text-sm text-center">
+          {{ errorMessage }}
+        </div>
+
         <div class="flex items-center justify-between">
           <button 
             class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" 
@@ -47,7 +60,7 @@
 </template>
 
 <script>
-import Navbar from '../../widgets/NavbarReg.vue'
+import Navbar from '../../widgets/NavbarReg.vue';
 import axios from 'axios';
 
 export default {
@@ -58,8 +71,10 @@ export default {
   data() {
     return {
       username: "",
-      email: "", 
-      password: ""
+      email: "",
+      password: "",
+      errorMessage: "",
+      attemptedSubmit: false
     };
   },
   computed: {
@@ -70,19 +85,26 @@ export default {
   },
   methods: {
     async registerUser() {
+      this.attemptedSubmit = true;
+      this.errorMessage = "";
+
+      if (!this.username || !this.password || !this.isValidEmail) {
+        this.errorMessage = "Please fill in all fields correctly.";
+        return;
+      }
+
       try {
-        if (!this.isValidEmail) {
-          return;
-        }
         const response = await axios.post("http://localhost:3000/register", {
           username: this.username,
           email: this.email,
           password: this.password
         });
+
         localStorage.setItem("user", JSON.stringify({ username: this.username }));
         console.log("Upload successful:", response.data);
         this.$router.push("/user");
       } catch (error) {
+        this.errorMessage = error.response?.data || "Registration failed";
         console.error("Error:", error);
       }
     }

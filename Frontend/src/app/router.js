@@ -6,6 +6,13 @@ import CataloguePage from '../pages/Catalogue.vue'
 import UserPage from '../pages/User.vue'
 import CartPage from '../pages/Cart.vue'
 
+import Admin from '../pages/Admin/Admin.vue'
+import AdminProducts from '../pages/Admin/AdminProducts.vue'
+import AdminUsers from '../pages/Admin/AdminUsers.vue'
+import AdminOrders from '../pages/Admin/AdminOrders.vue'
+
+import ProductPage from '../pages/Product.vue'
+
 const routes = [
     {
         path: '/',            
@@ -36,6 +43,29 @@ const routes = [
         path: '/cart',
         name: 'Cart',
         component: CartPage
+    },
+    { 
+        path: '/admin',
+        component: Admin,
+        children: [
+            {
+                path: 'products',
+                component: AdminProducts
+            }, 
+            { 
+                path: 'users',
+                component: AdminUsers
+            }, 
+            { 
+                path: 'orders',
+                component: AdminOrders
+            }
+        ]
+    },
+    { 
+        path: '/product/:id',
+        name: 'Product',
+        component: ProductPage
     }
 ]; 
 
@@ -47,3 +77,4 @@ const router = createRouter({
 
 export default router
     
+
