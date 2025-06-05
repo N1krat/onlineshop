@@ -51,27 +51,35 @@
       return {
         username: "",
         password: "",
-        errorMessage: ""
+        errorMessage: "", 
+        isLoggedIn: false
       };
     },
     methods: {
       async loginUser() {
+        this.errorMessage = "";
         try {
           const response = await axios.post("http://localhost:3000/login", {
             username: this.username,
             password: this.password
           });
-          const token = res.data.token;
+          console.log("Login response:", response.data);  // debug
+
+          const token = response.data.token;
           localStorage.setItem('token', token);
-          isLoggedIn.value = true;
+
+          // If you want to track login state locally
+          this.isLoggedIn = true;
+
           localStorage.setItem("user", JSON.stringify({ username: this.username }));
-  
+
           alert("Login Successful!");
           this.$router.push("/user");
         } catch (error) {
-          this.errorMessage = error.response?.data || "Login failed";
-        }``
+          this.errorMessage = error.response?.data?.message || "Login failed";
+        }
       }
+
       
     }
   }
