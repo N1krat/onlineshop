@@ -3,6 +3,8 @@ import HomePage from '../pages/Home.vue'
 import LoginPage from '../features/auth/Login.vue'
 import RegistrationPage from '../features/auth/Register.vue'
 import CataloguePage from '../pages/Catalogue.vue'
+import ProductPage from '../pages/Product.vue'
+
 import UserPage from '../pages/User.vue'
 import CartPage from '../pages/Cart.vue'
 
@@ -11,7 +13,6 @@ import AdminProducts from '../pages/Admin/AdminProducts.vue'
 import AdminUsers from '../pages/Admin/AdminUsers.vue'
 import AdminOrders from '../pages/Admin/AdminOrders.vue'
 
-import ProductPage from '../pages/Product.vue'
 
 const routes = [
     {
@@ -23,6 +24,11 @@ const routes = [
         path: '/catalogue',
         name: 'Catalogue',
         component: CataloguePage,
+    },
+    { 
+        path: '/product',
+        name: 'Product',
+        component: ProductPage,
     },
     { 
         path: '/login',
@@ -62,11 +68,7 @@ const routes = [
             }
         ]
     },
-    { 
-        path: '/product/:id',
-        name: 'Product',
-        component: ProductPage
-    }
+    
 ]; 
 
 

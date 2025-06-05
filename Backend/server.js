@@ -3,12 +3,13 @@ const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 
 const app = express();
 app.use(bodyParser.json());
 app.use(cors());
 
-const db = new Database("userData.db");
+const db = new Database("usData.db");er
 
 db.prepare(`CREATE TABLE IF NOT EXISTS users (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -30,6 +31,7 @@ db.prepare(`CREATE TABLE IF NOT EXISTS orders (
       user_id INTEGER,
       product_id INTEGER,
       quantity INTEGER,
+      action INTEGER,
       FOREIGN KEY (user_id) REFERENCES users(id),
       FOREIGN KEY (product_id) REFERENCES products(id)
   )`).run();
@@ -60,33 +62,42 @@ db.prepare(`CREATE TABLE IF NOT EXISTS orders (
     }
   });
   
-app.post("/login", (req, res) => {
-  const { username, password } = req.body;
-
-  if (!username || !password) {
-    return res.status(400).send("All fields are required");
-  }
-
-  db.get(
-    `SELECT * FROM users WHERE username = ?`,
-    [username],
-    async (err, user) => {
-      if (err) {
-        return res.status(500).send("Database error");
+  app.post("/login", (req, res) => {
+    try {
+      const { username, password } = req.body;
+  
+      if (!username || !password) {
+        return res.status(400).json({ error: "Username and password required" });
       }
-
+  
+      const user = db.prepare("SELECT * FROM users WHERE username = ?").get(username);
+      console.log("User from DB:", user);
+  
       if (!user) {
-        return res.status(400).send("User not found");
+        return res.status(400).json({ error: "User not found" });
       }
-
-      const passMatch = await bcrypt.compare(password, user.password);
+  
+      const passMatch = bcrypt.compareSync(password, user.password);
+      console.log("Password match?", passMatch);
+  
       if (!passMatch) {
-        return res.status(400).send("Invalid password");
+        return res.status(400).json({ error: "Invalid password" });
       }
-      return res.status(200).send("Login successful");
+  
+      // If using JWT, create token here (example)
+      const token = jwt.sign({ username: user.username, id: user.id }, "your-secret-key", {
+        expiresIn: "1h",
+      });
+  
+      console.log("Token generated:", token);
+  
+      res.json({ token });
+    } catch (err) {
+      console.error("Error in /login:", err);
+      res.status(500).json({ error: "Internal server error" });
     }
-  );
-});
+  });
+  
 
 // products 
 app.get("/products", (req, res) => {
@@ -111,6 +122,59 @@ app.post("/products", (req, res) => {
   }
 
 });
+
+app.delete("/products/:id", (req, res) => {
+  const productId = Number(req.params.id);
+
+  if (isNaN(productId)) {
+    return res.status(400).send("ID invalid");
+  }
+
+  try {
+    const result = db.prepare("DELETE FROM products WHERE id = ?").run(productId);
+
+    if (result.changes === 0) {
+      return res.status(404).send("Produsul nu a fost găsit");
+    }
+
+    res.status(200).send("Produs șters cu succes"); 
+  } catch (err) {
+    console.error("Eroare la ștergere:", err.message);
+    res.status(500).send("Eroare la ștergerea produsului");
+  }
+});
+
+// oders 
+app.get("/orders", (req, res) => {
+  try { 
+    const stmt = db.prepare("SELECT * FROM orders");
+    const orders = stmt.all();
+    res.json(orders);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Database error");
+  }
+});
+
+app.put('/orders/:id', (req, res) => {
+  const id = parseInt(req.params.id);
+  const action = parseInt(req.body.action);  // Ensure it's a number
+
+  try {
+    const stmt = db.prepare('UPDATE orders SET action = ? WHERE id = ?');
+    const result = stmt.run(action, id);
+
+    if (result.changes === 0) {
+      return res.status(404).send({ error: 'Order not found' });
+    }
+
+    res.send({ success: true });
+  } catch (err) {
+    console.error('Database error:', err);
+    res.status(500).send({ error: 'Database update failed' });
+  }
+});
+
 
 
 // admin page functionality
