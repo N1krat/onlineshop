@@ -6,7 +6,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const multer = require("multer"); 
 const fs = require('fs');
-
+const path = require("path")
 // configul pentru multer storage imagini 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -282,7 +282,7 @@ app.get("/uploads/:productId", (req, res) => {
 });
 
 
-app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+app.use("./uploads", express.static(path.join(__dirname, "./uploads")));
 
 
 const port = process.env.PORT || 3000;
