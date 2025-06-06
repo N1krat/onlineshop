@@ -9,7 +9,7 @@ const app = express();
 app.use(bodyParser.json());
 app.use(cors());
 
-const db = new Database("usData.db");er
+const db = new Database("userData.db");
 
 db.prepare(`CREATE TABLE IF NOT EXISTS users (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -35,6 +35,13 @@ db.prepare(`CREATE TABLE IF NOT EXISTS orders (
       FOREIGN KEY (user_id) REFERENCES users(id),
       FOREIGN KEY (product_id) REFERENCES products(id)
   )`).run();
+
+db.prepare(`CREATE TABLE IF NOT EXISTS uploads (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      product_id INTEGER,
+      image TEXT,
+      FOREIGN KEY (product_id) REFERENCES products(id)
+  )`).run(); 
 
   app.post("/register", async (req, res) => {
     const { username, password, email } = req.body;
