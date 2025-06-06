@@ -4,6 +4,25 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const multer = require("multer"); 
+const fs = require('fs');
+
+// configul pentru multer storage imagini 
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    const dir = "./uploads";
+    if (!fs.existsSync(dir)) fs.mkdirSync(dir);
+    cb(null, dir);
+  },
+  filename: function (req, file, cb) {
+    const uniqueName = product.id + "--" +  file.originalname;
+    cb(null, uniqueName);
+  },
+});
+
+const upload = multer({ storage });
+
+
 
 const app = express();
 app.use(bodyParser.json());
@@ -217,7 +236,53 @@ app.delete("/AdminUsers/:id", (req, res) => {
   }
 });
 
+app.post("/AdminUpload/:productId", upload.array("images", 5), (req, res) => {
+  const productId = parseInt(req.params.productId);
 
+  if (isNaN(productId)) {
+    return res.status(400).send("Invalid product ID");
+  }
+
+  if (!req.files || req.files.length === 0) {
+    return res.status(400).send("No images uploaded");
+  }
+
+  const insert = db.prepare("INSERT INTO uploads (product_id, image) VALUES (?, ?)");
+
+  try {
+    const insertMany = db.transaction((files) => {
+      for (const file of files) {
+        insert.run(productId, file.filename);
+      }
+    });
+
+    insertMany(req.files);
+    res.status(201).send("Images uploaded and saved successfully");
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Database error during upload");
+  }
+});
+
+app.get("/uploads/:productId", (req, res) => {
+  const productId = parseInt(req.params.productId);
+
+  if (isNaN(productId)) {
+    return res.status(400).send("Invalid product ID");
+  }
+
+  try {
+    const stmt = db.prepare("SELECT * FROM uploads WHERE product_id = ?");
+    const images = stmt.all(productId);
+    res.json(images);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Database error");
+  }
+});
+
+
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 
 const port = process.env.PORT || 3000;
