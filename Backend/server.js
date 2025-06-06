@@ -9,7 +9,7 @@ const app = express();
 app.use(bodyParser.json());
 app.use(cors());
 
-const db = new Database("usData.db");er
+const db = new Database("userData.db");
 
 db.prepare(`CREATE TABLE IF NOT EXISTS users (
       id INTEGER PRIMARY KEY AUTOINCREMENT,

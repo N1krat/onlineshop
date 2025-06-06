@@ -1,4 +1,5 @@
 <template>
+    <div class="all">
     <navbar></navbar>
     <div class="max-w-5xl mx-auto p-6 bg-white rounded-2xl shadow-lg">
       <div class="flex flex-col md:flex-row gap-6">
@@ -37,6 +38,7 @@
         </div>
       </div>
     </div>
+  </div>
   </template>
   
   <script>
