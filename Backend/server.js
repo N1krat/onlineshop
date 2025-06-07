@@ -1,32 +1,35 @@
 const Database = require("better-sqlite3");
 const express = require("express");
 const cors = require("cors");
-const bodyParser = require("body-parser");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const multer = require("multer"); 
 const fs = require('fs');
+const path = require('path');
+
+const app = express();
+app.use(express.json());
+app.use(cors());
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // configul pentru multer storage imagini 
 const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    const dir = "./uploads";
-    if (!fs.existsSync(dir)) fs.mkdirSync(dir);
-    cb(null, dir);
+  destination: (req, file, cb) => {
+    const uploadsDir = path.join(__dirname, 'uploads');
+    fs.mkdirSync(uploadsDir, { recursive: true });
+    cb(null, uploadsDir);
   },
-  filename: function (req, file, cb) {
-    const uniqueName = product.id + "--" +  file.originalname;
+  filename: (file, cb) => {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    const ext = path.extname(file.originalname);
+    const baseName = path.basename(file.originalname, ext);
+    const uniqueName = `${baseName}-${uniqueSuffix}${ext}`;
     cb(null, uniqueName);
   },
 });
 
 const upload = multer({ storage });
 
-
-
-const app = express();
-app.use(bodyParser.json());
-app.use(cors());
 
 const db = new Database("userData.db");
 
@@ -41,8 +44,7 @@ db.prepare(`CREATE TABLE IF NOT EXISTS products (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       name TEXT,
       price INTEGER,
-      description TEXT,
-      image TEXT
+      description TEXT
   )`).run();
 
 db.prepare(`CREATE TABLE IF NOT EXISTS orders (
@@ -137,17 +139,80 @@ app.get("/products", (req, res) => {
   }
 });
 
-app.post("/products", (req, res) => {
-  try { 
-    db.prepare(`INSERT INTO products (name, price, description, image) VALUES (?, ?, ?, ?)`)
-      .run(req.body.name, req.body.price, req.body.description, req.body.image);
-    res.status(201).send("Product added successfully");
+app.get("/products/:id", (req, res) => {
+  try {
+    const stmt = db.prepare("SELECT * FROM products WHERE id = ?");
+    const product = stmt.get(req.params.id);
+    res.json(product);
   } catch (err) {
     console.error(err);
     res.status(500).send("Database error");
   }
 
 });
+
+app.post("/products", upload.array("images", 5), (req, res) => {
+  const { name, price, description } = req.body;
+  console.log("req.files:", req.files);
+
+  if (!name || !price || !description) {
+    return res.status(400).json({ error: "Missing product data" });
+  }
+
+  try {
+    const result = db.prepare(`INSERT INTO products (name, price, description) VALUES (?, ?, ?)`)
+      .run(name, price, description);
+    
+    const productId = result.lastInsertRowid;
+
+    const insertImage = db.prepare("INSERT INTO uploads (product_id, image) VALUES (?, ?)");
+    const insertMany = db.transaction((files) => {
+      for (const file of files) {
+        insertImage.run(productId, file.filename);
+      }
+    });
+
+    if (req.files && req.files.length > 0) {
+      insertMany(req.files);
+    } else {
+      return res.status(400).json({ error: "No images uploaded" });
+    }
+
+    res.status(201).json({ message: "Product and images uploaded", productId });
+  } catch (error) {
+    console.error("Error in /products POST:", error);
+    res.status(500).json({ error: "Database error" });
+  }
+});
+
+
+app.put("/products/:id", (req, res) => {
+  const productId = Number(req.params.id);
+  const { name, price, description } = req.body;
+
+  if (isNaN(productId)) {
+    return res.status(400).send("ID invalid");
+  }
+
+  if (!name || !price || !description) {
+    return res.status(400).json({ error: "Missing product data" });
+  }
+
+  try {
+    const result = db.prepare("UPDATE products SET name = ?, price = ?, description = ? WHERE id = ?")
+      .run(name, price, description, productId);
+
+    if (result.changes === 0) {
+      return res.status(404).send("Product not found");
+    }
+
+    res.status(200).json({ message: "Product updated successfully" });
+  } catch (error) {
+    console.error("Error in /products PUT:", error);
+    res.status(500).json({ error: "Database error" });
+  }
+});
+
 
 app.delete("/products/:id", (req, res) => {
   const productId = Number(req.params.id);
@@ -157,18 +222,25 @@ app.delete("/products/:id", (req, res) => {
   }
 
   try {
+    // Șterge întâi din uploads și orders
+    db.prepare("DELETE FROM uploads WHERE product_id = ?").run(productId);
+    db.prepare("DELETE FROM orders WHERE product_id = ?").run(productId);
+
+    // Abia apoi din products
     const result = db.prepare("DELETE FROM products WHERE id = ?").run(productId);
 
     if (result.changes === 0) {
       return res.status(404).send("Produsul nu a fost găsit");
     }
 
-    res.status(200).send("Produs șters cu succes"); 
+    res.status(200).send("Produsul și datele asociate au fost șterse");
   } catch (err) {
     console.error("Eroare la ștergere:", err.message);
     res.status(500).send("Eroare la ștergerea produsului");
   }
 });
+
+
 
 // oders 
 app.get("/orders", (req, res) => {
@@ -264,8 +336,28 @@ app.post("/AdminUpload/:productId", upload.array("images", 5), (req, res) => {
   }
 });
 
+app.get("/products/:id/images", (req, res) => {
+  const productId = parseInt(req.params.id);
+  if (isNaN(productId)) return res.status(400).send("Invalid ID");
+
+  try {
+    const stmt = db.prepare("SELECT * FROM uploads WHERE product_id = ?");
+    const images = stmt.all(productId);
+    res.json(images);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("DB error");
+  }
+});
+
+
+
+
+// upload la imagini
+
 app.get("/uploads/:productId", (req, res) => {
   const productId = parseInt(req.params.productId);
+  console.log('GET /uploads/:productId called with', productId);
 
   if (isNaN(productId)) {
     return res.status(400).send("Invalid product ID");
@@ -282,11 +374,13 @@ app.get("/uploads/:productId", (req, res) => {
 });
 
 
-app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+
+
 
 
 const port = process.env.PORT || 3000;
 app.listen(port, () =>
   console.log(`Server running on http://localhost:${port}`)
 );
+
 
