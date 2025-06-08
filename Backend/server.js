@@ -2,25 +2,25 @@ const Database = require("better-sqlite3");
 const express = require("express");
 const cors = require("cors");
 const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
-const multer = require("multer"); 
-const fs = require('fs');
-const path = require('path');
+const multer = require("multer");
+const fs = require("fs");
+const path = require("path");
+const { v4: uuidv4 } = require("uuid");
 
 const app = express();
 app.use(express.json());
 app.use(cors());
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
-// configul pentru multer storage imagini 
+// configul pentru multer storage imagini
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    const uploadsDir = path.join(__dirname, 'uploads');
+    const uploadsDir = path.join(__dirname, "uploads");
     fs.mkdirSync(uploadsDir, { recursive: true });
     cb(null, uploadsDir);
   },
   filename: (file, cb) => {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
     const ext = path.extname(file.originalname);
     const baseName = path.basename(file.originalname, ext);
     const uniqueName = `${baseName}-${uniqueSuffix}${ext}`;
@@ -30,24 +30,29 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-
 const db = new Database("userData.db");
 
-db.prepare(`CREATE TABLE IF NOT EXISTS users (
+db.prepare(
+  `CREATE TABLE IF NOT EXISTS users (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       username TEXT UNIQUE,
       email TEXT UNIQUE,
-      password TEXT
-  )`).run();
+      password TEXT,
+      token TEXT UNIQUE
+  )`,
+).run();
 
-db.prepare(`CREATE TABLE IF NOT EXISTS products (
+db.prepare(
+  `CREATE TABLE IF NOT EXISTS products (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       name TEXT,
       price INTEGER,
       description TEXT
-  )`).run();
+  )`,
+).run();
 
-db.prepare(`CREATE TABLE IF NOT EXISTS orders (
+db.prepare(
+  `CREATE TABLE IF NOT EXISTS orders (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       user_id INTEGER,
       product_id INTEGER,
@@ -55,79 +60,76 @@ db.prepare(`CREATE TABLE IF NOT EXISTS orders (
       action INTEGER,
       FOREIGN KEY (user_id) REFERENCES users(id),
       FOREIGN KEY (product_id) REFERENCES products(id)
-  )`).run();
+  )`,
+).run();
 
-db.prepare(`CREATE TABLE IF NOT EXISTS uploads (
+db.prepare(
+  `CREATE TABLE IF NOT EXISTS uploads (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       product_id INTEGER,
       image TEXT,
       FOREIGN KEY (product_id) REFERENCES products(id)
-  )`).run(); 
+  )`,
+).run();
 
-  app.post("/register", async (req, res) => {
-    const { username, password, email } = req.body;
-  
-    if (!username || !password || !email) {
-      return res.status(400).send("All fields are required");
-    }
-  
-    if (!/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/.test(email)) {
-      return res.status(400).send("Invalid email address");
-    }
-  
-    try {
-      const hashedPassword = await bcrypt.hash(password, 10);
-  
-      db.prepare(`INSERT INTO users (username, email, password) VALUES (?, ?, ?)`)
-        .run(username, email, hashedPassword);
-  
-      res.status(201).send("User registered successfully");
-    } catch (error) {
-      if (error.message.includes("UNIQUE constraint")) {
-        return res.status(400).send("Username or email already exists");
-      }
-      res.status(500).send("Database error");
-    }
-  });
-  
-  app.post("/login", (req, res) => {
-    try {
-      const { username, password } = req.body;
-  
-      if (!username || !password) {
-        return res.status(400).json({ error: "Username and password required" });
-      }
-  
-      const user = db.prepare("SELECT * FROM users WHERE username = ?").get(username);
-      console.log("User from DB:", user);
-  
-      if (!user) {
-        return res.status(400).json({ error: "User not found" });
-      }
-  
-      const passMatch = bcrypt.compareSync(password, user.password);
-      console.log("Password match?", passMatch);
-  
-      if (!passMatch) {
-        return res.status(400).json({ error: "Invalid password" });
-      }
-  
-      // If using JWT, create token here (example)
-      const token = jwt.sign({ username: user.username, id: user.id }, "your-secret-key", {
-        expiresIn: "1h",
-      });
-  
-      console.log("Token generated:", token);
-  
-      res.json({ token });
-    } catch (err) {
-      console.error("Error in /login:", err);
-      res.status(500).json({ error: "Internal server error" });
-    }
-  });
-  
+app.post("/register", async (req, res) => {
+  const { username, password, email } = req.body;
 
-// products 
+  if (!username || !password || !email) {
+    return res.status(400).send("All fields are required");
+  }
+
+  if (!/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/.test(email)) {
+    return res.status(400).send("Invalid email address");
+  }
+  try {
+    const token = uuidv4();
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    db.prepare(
+      `INSERT INTO users (username, email, password, token) VALUES (?, ?, ?, ?)`,
+    ).run(username, email, hashedPassword, token);
+
+    res.status(201).send("User registered successfully");
+  } catch (error) {
+    if (error.message.includes("UNIQUE constraint")) {
+      return res.status(400).send("Username or email already exists");
+    }
+    res.status(500).send("Database error");
+  }
+});
+
+app.post("/login", (req, res) => {
+  try {
+    const { username, password } = req.body;
+
+    if (!username || !password) {
+      return res.status(400).json({ error: "Username and password required" });
+    }
+
+    const user = db
+      .prepare("SELECT * FROM users WHERE username = ?")
+      .get(username);
+    console.log("User from DB:", user);
+
+    if (!user) {
+      return res.status(400).json({ error: "User not found" });
+    }
+
+    const passMatch = bcrypt.compareSync(password, user.password);
+    console.log("Password match?", passMatch);
+
+    if (!passMatch) {
+      return res.status(400).json({ error: "Invalid password" });
+    }
+    res.json({ message: "Login Succesfull", token: user.token });
+  } catch (err) {
+    console.error("Error in /login:", err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+// products
 app.get("/products", (req, res) => {
   try {
     const stmt = db.prepare("SELECT * FROM products");
@@ -148,7 +150,6 @@ app.get("/products/:id", (req, res) => {
     console.error(err);
     res.status(500).send("Database error");
   }
-
 });
 
 app.post("/products", upload.array("images", 5), (req, res) => {
@@ -160,12 +161,17 @@ app.post("/products", upload.array("images", 5), (req, res) => {
   }
 
   try {
-    const result = db.prepare(`INSERT INTO products (name, price, description) VALUES (?, ?, ?)`)
+    const result = db
+      .prepare(
+        `INSERT INTO products (name, price, description) VALUES (?, ?, ?)`,
+      )
       .run(name, price, description);
-    
+
     const productId = result.lastInsertRowid;
 
-    const insertImage = db.prepare("INSERT INTO uploads (product_id, image) VALUES (?, ?)");
+    const insertImage = db.prepare(
+      "INSERT INTO uploads (product_id, image) VALUES (?, ?)",
+    );
     const insertMany = db.transaction((files) => {
       for (const file of files) {
         insertImage.run(productId, file.filename);
@@ -185,7 +191,6 @@ app.post("/products", upload.array("images", 5), (req, res) => {
   }
 });
 
-
 app.put("/products/:id", (req, res) => {
   const productId = Number(req.params.id);
   const { name, price, description } = req.body;
@@ -199,7 +204,10 @@ app.put("/products/:id", (req, res) => {
   }
 
   try {
-    const result = db.prepare("UPDATE products SET name = ?, price = ?, description = ? WHERE id = ?")
+    const result = db
+      .prepare(
+        "UPDATE products SET name = ?, price = ?, description = ? WHERE id = ?",
+      )
       .run(name, price, description, productId);
 
     if (result.changes === 0) {
@@ -212,7 +220,6 @@ app.put("/products/:id", (req, res) => {
     res.status(500).json({ error: "Database error" });
   }
 });
-
 
 app.delete("/products/:id", (req, res) => {
   const productId = Number(req.params.id);
@@ -227,7 +234,9 @@ app.delete("/products/:id", (req, res) => {
     db.prepare("DELETE FROM orders WHERE product_id = ?").run(productId);
 
     // Abia apoi din products
-    const result = db.prepare("DELETE FROM products WHERE id = ?").run(productId);
+    const result = db
+      .prepare("DELETE FROM products WHERE id = ?")
+      .run(productId);
 
     if (result.changes === 0) {
       return res.status(404).send("Produsul nu a fost găsit");
@@ -240,11 +249,9 @@ app.delete("/products/:id", (req, res) => {
   }
 });
 
-
-
-// oders 
+// oders
 app.get("/orders", (req, res) => {
-  try { 
+  try {
     const stmt = db.prepare("SELECT * FROM orders");
     const orders = stmt.all();
     res.json(orders);
@@ -254,26 +261,24 @@ app.get("/orders", (req, res) => {
   }
 });
 
-app.put('/orders/:id', (req, res) => {
+app.put("/orders/:id", (req, res) => {
   const id = parseInt(req.params.id);
-  const action = parseInt(req.body.action);  // Ensure it's a number
+  const action = parseInt(req.body.action); // Ensure it's a number
 
   try {
-    const stmt = db.prepare('UPDATE orders SET action = ? WHERE id = ?');
+    const stmt = db.prepare("UPDATE orders SET action = ? WHERE id = ?");
     const result = stmt.run(action, id);
 
     if (result.changes === 0) {
-      return res.status(404).send({ error: 'Order not found' });
+      return res.status(404).send({ error: "Order not found" });
     }
 
     res.send({ success: true });
   } catch (err) {
-    console.error('Database error:', err);
-    res.status(500).send({ error: 'Database update failed' });
+    console.error("Database error:", err);
+    res.status(500).send({ error: "Database update failed" });
   }
 });
-
-
 
 // admin page functionality
 app.get("/AdminPanelUsers", (req, res) => {
@@ -319,7 +324,9 @@ app.post("/AdminUpload/:productId", upload.array("images", 5), (req, res) => {
     return res.status(400).send("No images uploaded");
   }
 
-  const insert = db.prepare("INSERT INTO uploads (product_id, image) VALUES (?, ?)");
+  const insert = db.prepare(
+    "INSERT INTO uploads (product_id, image) VALUES (?, ?)",
+  );
 
   try {
     const insertMany = db.transaction((files) => {
@@ -350,14 +357,11 @@ app.get("/products/:id/images", (req, res) => {
   }
 });
 
-
-
-
 // upload la imagini
 
 app.get("/uploads/:productId", (req, res) => {
   const productId = parseInt(req.params.productId);
-  console.log('GET /uploads/:productId called with', productId);
+  console.log("GET /uploads/:productId called with", productId);
 
   if (isNaN(productId)) {
     return res.status(400).send("Invalid product ID");
@@ -373,14 +377,7 @@ app.get("/uploads/:productId", (req, res) => {
   }
 });
 
-
-
-
-
-
 const port = process.env.PORT || 3000;
 app.listen(port, () =>
-  console.log(`Server running on http://localhost:${port}`)
+  console.log(`Server running on http://localhost:${port}`),
 );
-
-
