@@ -341,6 +341,7 @@ function addToCart(product) {
 
     localStorage.setItem(cartKey, JSON.stringify(storedCart));
     console.log("Cart updated:", storedCart);
+    window.location.reload();
 }
 
 // Carousel logic
