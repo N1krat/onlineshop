@@ -43,6 +43,9 @@
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
             </svg>
             Cart
+            <span v-if="cart.reduce((sum, item) => sum + item.quantity, 0) > 0" class="text-black inline-flex items-center justify-center w-4 h-4 ms-2 text-xs font-semibold  bg-blue-200 rounded-full">
+            {{ cart.reduce((sum, item) => sum + item.quantity, 0) }}
+            </span>
           </button>
         </li>
         <li>
@@ -58,6 +61,7 @@
 </template>
 
 <script>
+
 export default {
   name: "Navbar",
 };
@@ -66,12 +70,51 @@ export default {
 </script>
 
 <script setup>
+import { ref, onMounted, computed, watch } from "vue";
+
+
 function openCart() {
   window.location.href = "/cart";
 }
 function userProfile() { 
   window.location.href = "/login";
 }
+
+
+
+const cart = ref([]);
+const cartKey = ref("");
+const totalPrice = computed(() =>
+    cart.value.reduce((sum, item) => sum + item.price * item.quantity, 0),
+);
+
+onMounted(() => {
+    const token = localStorage.getItem("token");
+
+    if (token) {
+        cartKey.value = `cart_${token}`;
+    } else {
+        cartKey.value = "cart_guest";
+    }
+    localStorage.setItem("cartKey", cartKey.value);
+
+    const savedCart = localStorage.getItem(cartKey.value);
+    if (savedCart) {
+        cart.value = JSON.parse(savedCart);
+        console.log("📦 Cart loaded from localStorage:", cart.value);
+    }
+});
+
+watch(
+    cart,
+    (newCart) => {
+        if (cartKey.value) {
+            localStorage.setItem(cartKey.value, JSON.stringify(newCart));
+        }
+    },
+    { deep: true },
+);
+
 </script>
 
 <style scoped>

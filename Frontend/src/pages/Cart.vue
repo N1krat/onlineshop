@@ -27,6 +27,14 @@
             >
                 <h1 class="text-4xl font-bold">Your checkout</h1>
                 <p>Total price: {{ totalPrice }} $</p>
+                <p>Total items: {{ cart.reduce((sum, item) => sum + item.quantity, 0) }}</p>
+                <br/>
+                
+                <p v-for="item in cart">{{ item.quantity }} x {{ item.name }}</p>
+        
+
+                <button class="bg-green-500 text-white rounded-lg p-2 mt-4 hover:bg-green-600 transition">Proceed to Checkout</button>
+
             </div>
         </div>
     </div>
