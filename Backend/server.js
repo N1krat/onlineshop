@@ -19,7 +19,7 @@ const storage = multer.diskStorage({
     fs.mkdirSync(uploadsDir, { recursive: true });
     cb(null, uploadsDir);
   },
-  filename: (file, cb) => {
+  filename: (req, file, cb) => {
     const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
     const ext = path.extname(file.originalname);
     const baseName = path.basename(file.originalname, ext);
@@ -381,3 +381,4 @@ const port = process.env.PORT || 3000;
 app.listen(port, () =>
   console.log(`Server running on http://localhost:${port}`),
 );
+
