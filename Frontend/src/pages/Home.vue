@@ -328,39 +328,20 @@ import axios from "axios";
 
 // Cart state (reactive)
 const products = ref([]);
-<<<<<<< HEAD
+
 console.log(products); 
-=======
+
 const limit = 3;
 const limit2 = 4;
 const limitedProducts = computed(() => products.value.slice(0, limit));
 const limitedpopProducts = computed(() => products.value.slice(0, limit2));
 
->>>>>>> 1d9c3d0e9650454260b917a8229c3bbbeda60f11
 const cart = ref([]);
 
 onMounted(async () => {
     try {
-<<<<<<< HEAD
         const response = await axios.get("http://localhost:3000/products");
-        products.value = response.data;
-        console.log("Products loaded:", products.value);
-
-        // Load product images
-        const imagePromises = products.value.map(async (product) => {
-            const res = await axios.get(`http://localhost:3000/uploads/${product.id}`);
-            const images = res.data.filter((img) => img.image);
-            product.images = images.map((img) => `http://localhost:3000/uploads/${img.image}`);
-            
-        });
-        await Promise.all(imagePromises);
-    } catch (err) {
-        console.error("Error fetching products:", err);
-=======
-        const productResponse = await axios.get(
-            "http://localhost:3000/products",
-        );
-        const fetchedProducts = productResponse.data;
+        const fetchedProducts = response.data;
 
         const productsWithImages = await Promise.all(
             fetchedProducts.map(async (product) => {
@@ -385,11 +366,9 @@ onMounted(async () => {
             }),
         );
 
-        products.value = productsWithImages;
-    } catch (error) {
-        console.error("Error fetching products:", error);
->>>>>>> 1d9c3d0e9650454260b917a8229c3bbbeda60f11
-    }
+        products.value = productsWithImages
+       
+        products.value = productsWithImages
     const savedCart = localStorage.getItem("cart");
     if (savedCart) {
         cart.value = JSON.parse(savedCart);
@@ -402,7 +381,7 @@ onMounted(async () => {
     return {
         products,
     };
-});
+}
 watch(
     cart,
     (newCart) => {
@@ -654,3 +633,5 @@ footer {
 
 
 
+
+      
