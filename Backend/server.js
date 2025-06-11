@@ -195,22 +195,22 @@ app.post("/products", upload.array("images", 5), (req, res) => {
 
 app.put("/products/:id", (req, res) => {
   const productId = Number(req.params.id);
-  const { name, price, description } = req.body;
+  const { name, price, category, description } = req.body;
 
   if (isNaN(productId)) {
     return res.status(400).send("ID invalid");
   }
 
-  if (!name || !price || !description) {
+  if (!name || !price || !category || !description) {
     return res.status(400).json({ error: "Missing product data" });
   }
 
   try {
     const result = db
       .prepare(
-        "UPDATE products SET name = ?, price = ?, description = ? WHERE id = ?",
+        "UPDATE products SET name = ?, price = ?, category = ?, description = ? WHERE id = ?",
       )
-      .run(name, price, description, productId);
+      .run(name, price, category, description, productId);
 
     if (result.changes === 0) {
       return res.status(404).send("Product not found");

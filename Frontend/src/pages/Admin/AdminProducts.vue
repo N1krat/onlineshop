@@ -20,6 +20,7 @@
             <th class="px-6 py-3">Product name</th>
             <th class="px-6 py-3">Price</th>
             <th class="px-6 py-3">Description</th>
+            <th class="px-6 py-3">Category</th>
             <th class="px-6 py-3">Image</th>
             <th class="px-6 py-3">Actions</th>
           </tr>
@@ -34,6 +35,8 @@
             <td class="px-6 py-4">{{ productItem.name }}</td>
             <td class="px-6 py-4">{{ productItem.price }}</td>
             <td class="px-6 py-4">{{ productItem.description }}</td>
+            <td class="px-6 py-4">{{ productItem.Category }}</td>
+
             <td class="px-6 py-4">
               <button
                 @click="showImages(productItem.id)"
@@ -104,6 +107,10 @@
             <input v-model.number="newProduct.price" type="number" min="0" step="0.01" required class="w-full border rounded px-2 py-1" />
           </div>
           <div class="mb-3">
+            <label class="block mb-1 font-medium">Category</label>
+            <input v-model="newProduct.category" type="text" required class="w-full border rounded px-2 py-1"></input>
+          </div>
+          <div class="mb-3">
             <label class="block mb-1 font-medium">Description</label>
             <textarea v-model="newProduct.description" required class="w-full border rounded px-2 py-1"></textarea>
           </div>
@@ -143,6 +150,10 @@
             <input v-model.number="editedProduct.price" type="number" min="0" step="0.01" required class="w-full border rounded px-2 py-1" />
           </div>
           <div class="mb-3">
+            <label class="block mb-1 font-medium">Category</label>
+            <input v-model="editedProduct.category" type="text" required class="w-full border rounded px-2 py-1"></input>
+          </div>
+          <div class="mb-3">
             <label class="block mb-1 font-medium">Description</label>
             <textarea v-model="editedProduct.description" required class="w-full border rounded px-2 py-1"></textarea>
           </div>
@@ -176,7 +187,7 @@ export default {
   setup() {
     const products = ref([]);
     const showAddModal = ref(false);
-    const showEditModal = ref(false); 
+    const showEditModal = ref(false);
     const selectedImages = ref([]);
     const editedProduct = ref({
       id: null,
@@ -212,7 +223,7 @@ export default {
     // Show images modal, load images for product
     const showImages = async (productId) => {
       try {
-        
+
 
         const res = await axios.get(`http://localhost:3000/uploads/${productId}`);
 
@@ -232,8 +243,9 @@ export default {
         const formData = new FormData();
           formData.append('name', newProduct.value.name);
           formData.append('price', newProduct.value.price);
+          formData.append('category', newProduct.value.category);
           formData.append('description', newProduct.value.description);
-         
+
         selectedImages.value.forEach(file => {
             formData.append('images', file);
         });
@@ -257,18 +269,18 @@ export default {
       showEditModal.value = true;
     };
 
-    const saveEditedData = async () => { 
-      try { 
-        console.log(editedProduct.value); 
-        const id = editedProduct.value.id; 
+    const saveEditedData = async () => {
+      try {
+        console.log(editedProduct.value);
+        const id = editedProduct.value.id;
         await axios.put(`http://localhost:3000/products/${id}`, editedProduct.value)
 
-        showEditModal.value = false; 
+        showEditModal.value = false;
         window.location.reload();
-      } catch (error) { 
-        console.error('Error', error);    
+      } catch (error) {
+        console.error('Error', error);
       }
-    }; 
+    };
 
     // Delete product by id
     const deleteProduct = async (id) => {
@@ -294,13 +306,12 @@ export default {
       showImages,
       addProduct,
       deleteProduct,
-      showEditModal, 
+      showEditModal,
       editedProduct,
-      openEditModal, 
-      saveEditedData, 
+      openEditModal,
+      saveEditedData,
 
     };
   },
 };
 </script>
-
