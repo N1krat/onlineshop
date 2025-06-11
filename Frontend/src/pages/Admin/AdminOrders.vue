@@ -19,8 +19,7 @@
             :key="order.id"
           >
             <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-              {{ order.id }}
-            </th>
+              {{ order.id }}            </th>
             <td class="px-6 py-4">{{ order.user_id }}</td>
             <td class="px-6 py-4">{{ order.product_id }}</td>
             <td class="px-6 py-4">{{ order.quantity }}</td>

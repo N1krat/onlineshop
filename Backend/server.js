@@ -100,7 +100,6 @@ app.post("/register", async (req, res) => {
     res.status(500).send("Database error");
   }
 });
-
 app.post("/login", (req, res) => {
   try {
     const { username, password } = req.body;
@@ -124,7 +123,8 @@ app.post("/login", (req, res) => {
     if (!passMatch) {
       return res.status(400).json({ error: "Invalid password" });
     }
-    res.json({ message: "Login Succesfull", token: user.token });
+
+    res.json({ message: "Login Successful", token: user.token, redirect: `/user/${username}` });
   } catch (err) {
     console.error("Error in /login:", err);
     res.status(500).json({ error: "Internal server error" });
