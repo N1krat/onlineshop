@@ -10,7 +10,7 @@
         </h2>
         
         <div class="ordersTable grid grid-cols-3 px-25">
-            <table class="w-full text-sm text-left rtl:text-right text-gray-700 mt-5">
+            <table class="w-full text-sm text-left rtl:text-right text-gray-700 mt-5  mb-10">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50">
                 <tr>
                     <th scope="col" class="px-6 py-3">Order ID</th>
@@ -68,17 +68,29 @@ export default {
     mounted() {
         const userData = localStorage.getItem("user");
         if (userData) {
-            const user = JSON.parse(userData);
-            this.username = user.name;
+            const username = JSON.parse(localStorage.getItem("user")).name;
+            this.username = username;
 
-            axios.get(`http://localhost:3000/orders?user_id=${user.id}`)
-                .then(response => {
-                    this.orders = response.data;
-                })
+            // 1) Cerem id-ul utilizatorului după nume
+            axios.get(`http://localhost:3000/users/${username}`)
+            .then(res => {
+                const userId = res.data.id;
+
+                // 2) Cerem comenzile cu id-ul primit
+                console.log(userId); 
+                return axios.get(`http://localhost:3000/orders/${userId}`);
+            })
+            .then(response => {
+                this.orders = response.data;
+            })
+            .catch(error => {
+                console.error(error);
+            });
+            
         }
-    }
-};
+        }
 
+};
 
 </script>
 

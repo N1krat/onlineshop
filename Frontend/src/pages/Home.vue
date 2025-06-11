@@ -1,7 +1,8 @@
 <template>
     <div class="all">
         <Navbar />
-        
+        <ProductList @add-to-cart="addToCart" />
+        <Cart :items="cart" @remove-item="removeFromCart" />
 
         <!-- Carousel Section -->
         <div class="section1">
@@ -63,7 +64,7 @@
         </div>
 
         <!-- New Products -->
-        <div class="section2 mt-30">
+        <div class="section2 ">
             <div class="newProducts px-1 flex justify-between items-center">
                 <h1 class="text-4xl m-0 p-0">New Products</h1>
                 <router-link to="/" class="seeMoreLink">See More</router-link>
@@ -81,12 +82,12 @@
                         class="p-8 rounded-t-lg bg-gray-50 object-contain h-64 w-full"
                         alt="product image"
                     />
-                    <div class="px-5 pb-5 mt-3">
+                    <div class="px-5 pb-5">
                         <h5 class="text-xl font-semibold tracking-tight text-gray-900">
                             {{ product.name }}
                         </h5>
-                        <div class="flex items-center justify-between mt-2 gap-4">
-                            <span class="text-2xl font-bold text-gray-900">
+                        <div class="flex items-center justify-between mt-2">
+                            <span class="text-3xl font-bold text-gray-900">
                                 {{ product.price }} MDL
                             </span>
                             <button
@@ -115,11 +116,11 @@
                         class="p-8 bg-gray-50 rounded-t-lg h-64 w-full object-contain"
                         alt="product image"
                     />
-                    <div class="px-5 pb-5 mt-3">
+                    <div class="px-5 pb-5">
                         <h5 class="text-xl font-semibold tracking-tight text-black">
                             {{ product.name }}
                         </h5>
-                        <div class="flex items-center justify-between mt-2 gap-4">
+                        <div class="flex items-center justify-between mt-2">
                             <span class="text-3xl font-bold text-black">
                                 {{ product.price }} MDL
                             </span>
@@ -184,21 +185,16 @@ function prevSlide() {
 
 // Cart management
 function addToCart(product) {
- 
-  const existing = cart.value.find((p) => p.id === product.id);
-  if (!existing) {
-    cart.value.push({ ...product, quantity: 1 });
-  } else {
-    existing.quantity++;
-  }
- 
-  localStorage.setItem("cart", JSON.stringify(cart.value));
+    const existing = cart.value.find((p) => p.id === product.id);
+    if (!existing) {
+        cart.value.push({ ...product, quantity: 1 });
+    } else {
+        existing.quantity++;
+    }
 }
-
 
 function removeFromCart(productId) {
     cart.value = cart.value.filter((p) => p.id !== productId);
-    localStorage.setItem("cart", JSON.stringify(cart.value));
 }
 
 // Shop navigation
@@ -301,7 +297,9 @@ onBeforeUnmount(() => {
 
 /* section2 */
 .section2 {
-   
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(2, 1fr);
     padding: 10px;
     margin-right: 10vh;
     margin-left: 10vh;
@@ -322,10 +320,8 @@ onBeforeUnmount(() => {
 }
 
 .newProductsMain {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    grid-template-rows: repeat(2, 1fr);
-    
+    grid-column: span 4 / span 4;
+    grid-row-start: 2;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
@@ -440,5 +436,3 @@ footer {
 
 
       
-
-

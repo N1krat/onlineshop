@@ -102,7 +102,7 @@ export default {
 
         localStorage.setItem("user", JSON.stringify({ username: this.username }));
         console.log("Upload successful:", response.data);
-        this.$router.push("/user");
+        this.$router.push("/user/" + this.username);
       } catch (error) {
         this.errorMessage = error.response?.data || "Registration failed";
         console.error("Error:", error);

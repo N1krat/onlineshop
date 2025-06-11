@@ -437,3 +437,38 @@ const port = process.env.PORT || 3000;
 app.listen(port, () =>
   console.log(`Server running on http://localhost:${port}`),
 );
+
+// loads orders for a specific user
+app.get("/orders/:userId", (req, res) => {
+  const userId = parseInt(req.params.userId);
+
+  if (isNaN(userId)) {
+    return res.status(400).send("Invalid user ID");
+  }
+
+  try {
+    const stmt = db.prepare("SELECT * FROM orders WHERE user_id = ?");
+    const orders = stmt.all(userId);
+    res.json(orders);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Database error");
+  }
+});
+app.get("/users/:username", (req, res) => {
+  const username = req.params.username;
+
+  try {
+    const stmt = db.prepare("SELECT id from users WHERE username = ?");
+    const user = stmt.get(username);
+
+    if (user) {
+      res.json(user);
+    } else {
+      res.status(404).send("User not found");
+    }
+  } catch (err) {
+    console.error("DB error:", err);
+    res.status(500).send("Database error");
+  }
+});
