@@ -1,11 +1,9 @@
 <template>
-    <!-- tipa navbar component -->
     <div class="all">
         <Navbar />
-        <ProductList @add-to-cart="addToCart" />
-        <Cart :items="cart" @remove-item="removeFromCart" />
-        <!-- main pagul propriuzis -->
-        <!-- Main collections -->
+        
+
+        <!-- Carousel Section -->
         <div class="section1">
             <div class="newCol p-3">
                 <h1 class="text-6xl">New Products</h1>
@@ -17,63 +15,17 @@
                 <div
                     ref="carousel"
                     class="flex transition-transform duration-300 ease-in-out"
+                    :style="{ transform: `translateX(-${currentIndex * 100}%)` }"
                 >
-                    <div class="colImages min-w-1/2 px-2">
-                        <div class="image">
-                            <img
-                                :src="products[0]?.images?.[0]"
-                                alt="placeholder image"
-                                class="w-full h-full object-cover"
-                            />
-                        </div>
-                    </div>
-                    <div class="colImages min-w-1/2 px-2">
+                    <div
+                        v-for="(product, index) in products.slice(0, 6)"
+                        :key="index"
+                        class="colImages min-w-1/2 px-2"
+                    >
                         <div class="image h-[270px]">
                             <img
-                                :src="products[1]?.images?.[0]"
-                                src="../assets/images/macbook.jpg"
-                                alt="placeholder image"
-                                class="w-full h-full object-cover"
-                            />
-                        </div>
-                    </div>
-                    <!-- Repeat 4 more times (total 6) -->
-                    <div class="colImages min-w-1/2 px-2">
-                        <div class="image">
-                            <img
-                                :src="products[2]?.images?.[0]"
-                                src="../assets/images/iphone16.png"
-                                alt="placeholder image"
-                                class="w-full h-full object-cover"
-                            />
-                        </div>
-                    </div>
-                    <div class="colImages min-w-1/2 px-2">
-                        <div class="image">
-                            <img
-                                :src="products[3]?.images?.[0]"
-                                src="../assets/images/macbook.jpg"
-                                alt="placeholder image"
-                                class="w-full h-full object-cover"
-                            />
-                        </div>
-                    </div>
-                    <div class="colImages min-w-1/2 px-2">
-                        <div class="image">
-                            <img
-                                :src="products[4]?.images?.[0]"
-                                src="../assets/images/iphone16.png"
-                                alt="placeholder image"
-                                class="w-full h-full object-cover"
-                            />
-                        </div>
-                    </div>
-                    <div class="colImages min-w-1/2 px-2">
-                        <div class="image">
-                            <img
-                                :src="products[5]?.images?.[0]"
-                                src="../assets/images/macbook.jpg"
-                                alt="placeholder image"
+                                :src="product.image"
+                                alt="product image"
                                 class="w-full h-full object-cover"
                             />
                         </div>
@@ -88,205 +40,102 @@
                         class="bg-white mr-20 hover:bg-gray-100 text-gray-800 font-semibold py-1 px-3 border border-gray-400 rounded shadow"
                     >
                         <span class="mr-5">Go To Shop</span>
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            class="h-5 w-5"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                        >
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="2"
-                                d="M14 5l7 7m0 0l-7 7m7-7H3"
-                            />
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
+                             viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                  stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
                         </svg>
                     </button>
-
                     <button
                         class="bg-transparent hover:bg-gray-500 text-gray-700 font-semibold hover:text-white py-2 px-4 border border-gray-500 hover:border-transparent rounded"
                         @click="prevSlide"
                     >
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            class="h-5 w-5"
-                            viewBox="0 0 20 20"
-                            fill="currentColor"
-                        >
-                            <path
-                                fill-rule="evenodd"
-                                d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
-                                clip-rule="evenodd"
-                            />
-                        </svg>
+                        ◀
                     </button>
                     <button
                         class="bg-transparent hover:bg-gray-500 text-gray-700 font-semibold hover:text-white py-2 px-4 border border-gray-500 hover:border-transparent rounded"
                         @click="nextSlide"
                     >
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            class="h-5 w-5"
-                            viewBox="0 0 20 20"
-                            fill="currentColor"
-                        >
-                            <path
-                                fill-rule="evenodd"
-                                d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                                clip-rule="evenodd"
-                            />
-                        </svg>
+                        ▶
                     </button>
                 </div>
             </div>
         </div>
 
-        <!-- New products -->
-        <div class="section2 mb-10">
+        <!-- New Products -->
+        <div class="section2 mt-30">
             <div class="newProducts px-1 flex justify-between items-center">
-                <h1 class="text-4xl m-0">New Products</h1>
+                <h1 class="text-4xl m-0 p-0">New Products</h1>
                 <router-link to="/" class="seeMoreLink">See More</router-link>
             </div>
 
-<<<<<<< HEAD
-            <div class="newProductsMain" style="margin-top: -12vh">
-                
-                <div
-                    v-for="product in products.slice(0, 3)"
-                    :key="product.id"
-                    class="w-full max-w-sm rounded-lg dark:border-gray-700"
-                >
-                    <a href="#">
-                        <img
-                            v-if="product.images && product.images[0]"
-                            :src="product.images[0]"
-                            class="p-8 mb-6 rounded-t-lg bg-gray-50"
-                            alt="product image"
-                        />
-                    </a>
-                    <div class="px-5 pb-5">
-                        <a href="#">
-                            <h5
-                            >
-                                {{ product.name }}
-                            </h5>
-                        </a>
-                        <br />
-                        <div class="flex items-center justify-between">
-                            <span
-                                class="text-3xl font-bold text-black dark:text-black"
-                                >{{ product.price }} MDL</span
-                            >
-                            <button
-                                @click="addToCart(product)"
-                                href="#"
-                                class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                            >
-                                Add to cart
-                            </button>
-=======
-            <div class="products p-2 w-full">
+            <div class="newProductsMain mt-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                 <div
                     v-for="product in limitedProducts"
                     :key="product.id"
-                    class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-1 gap-6"
+                    class="bg-white border border-gray-200 rounded-lg shadow-sm"
                 >
-                    <div
-                        class="bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700"
-                    >
-                        <router-link :to="`/product/${product.id}`">
-                            <img
-                                class="pt-8 object-contain w-full h-[300px] rounded-xl"
-                                :src="product.image"
-                                alt="product image"
-                            />
-                        </router-link>
-                        <div class="px-5 pb-5">
-                            <router-link :to="`/product/${product.id}`">
-                                <h5
-                                    class="mt-4 mx-4 mr-4 text-xl font-semibold tracking-tight text-gray-900 dark:text-white"
-                                >
-                                    {{ product.name }}
-                                </h5>
-                            </router-link>
-                            <div class="flex items-center justify-between mt-2">
-                                <span
-                                    class="text-3xl font-bold text-gray-900 dark:text-white"
-                                    >${{ product.price }}</span
-                                >
-                                <router-link
-                                    to="/cart"
-                                    class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                                >
-                                    Add to cart
-                                </router-link>
-                            </div>
->>>>>>> 1d9c3d0e9650454260b917a8229c3bbbeda60f11
+                    <img
+                        v-if="product.image"
+                        :src="product.image"
+                        class="p-8 rounded-t-lg bg-gray-50 object-contain h-64 w-full"
+                        alt="product image"
+                    />
+                    <div class="px-5 pb-5 mt-3">
+                        <h5 class="text-xl font-semibold tracking-tight text-gray-900">
+                            {{ product.name }}
+                        </h5>
+                        <div class="flex items-center justify-between mt-2 gap-4">
+                            <span class="text-2xl font-bold text-gray-900">
+                                {{ product.price }} MDL
+                            </span>
+                            <button
+                                @click="addToCart(product)"
+                                class="text-white bg-blue-700 hover:bg-blue-800 font-medium rounded-lg text-sm px-5 py-2.5"
+                            >
+                                Add to cart
+                            </button>
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
 
+        <!-- Most Popular Products -->
         <div class="mostPopular mt-30 mx-4">
-            <h2 class="text-5xl font-bold mx-20 mb-40">
-                Our Most Popular Products
-            </h2>
-
-            <div class="popularProductsMain" style="margin-top: -12vh">
-<<<<<<< HEAD
-                
-
-=======
->>>>>>> 1d9c3d0e9650454260b917a8229c3bbbeda60f11
+            <h2 class="text-5xl font-bold mx-20 mb-12">Our Most Popular Products</h2>
+            <div class="popularProductsMain grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
                 <div
                     v-for="product in limitedpopProducts"
                     :key="product.id"
-                    class="w-full max-w-sm rounded-lg dark:border-gray-700"
+                    class="bg-white border border-gray-200 rounded-lg shadow-sm"
                 >
-                    <a href="#">
-                        <img
-<<<<<<< HEAD
-                            :src="product.images[0]"
-                            class="p-8 mb-6 rounded-t-lg bg-gray-50"
-                            alt="product image"
-                        />
-                    </a>                    <div class="px-5 pb-5">
-=======
-                            class="p-8 rounded-t-lg bg-gray-50"
-                            :src="product.image"
-                            alt="product image"
-                        />
-                    </a>
-                    <div class="px-5 pb-5">
->>>>>>> 1d9c3d0e9650454260b917a8229c3bbbeda60f11
-                        <a href="#">
-                            <h5
-                                class="text-xl font-semibold tracking-tight text-black dark:text-black"
+                    <img
+                        :src="product.image"
+                        class="p-8 bg-gray-50 rounded-t-lg h-64 w-full object-contain"
+                        alt="product image"
+                    />
+                    <div class="px-5 pb-5 mt-3">
+                        <h5 class="text-xl font-semibold tracking-tight text-black">
+                            {{ product.name }}
+                        </h5>
+                        <div class="flex items-center justify-between mt-2 gap-4">
+                            <span class="text-3xl font-bold text-black">
+                                {{ product.price }} MDL
+                            </span>
+                            <button
+                                @click="addToCart(product)"
+                                class="text-white bg-blue-700 hover:bg-blue-800 font-medium rounded-lg text-sm px-5 py-2.5"
                             >
-                                {{ product.name }}
-                            </h5>
-                        </a>
-                        <br />
-                        <div class="flex items-center justify-between">
-                            <span
-                                class="text-3xl font-bold text-black dark:text-black"
-                                >{{ product.price }} MDL</span
-                            >
-                            <a
-                                href="#"
-                                class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                                >Add to cart</a
-                            >
+                                Add to cart
+                            </button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-<<<<<<< HEAD
 
+        <!-- Footer -->
         <footer class="mt-20">
             <div class="footerDivs p-6">
                 <div class="info text-xl p-3">Info</div>
@@ -295,20 +144,7 @@
                 <div class="email text-xl p-3">Email: platforma@gmail.com</div>
             </div>
         </footer>
-=======
->>>>>>> 1d9c3d0e9650454260b917a8229c3bbbeda60f11
     </div>
-
-    <footer class="mt-20">
-        <div class="footerDivs p-6">
-            <div class="info text-xl p-3">Info</div>
-            <div class="links text-xl p-3">Email</div>
-            <div class="contact text-xl p-3">Contact</div>
-            <div class="logo">
-                <span class="text-xl p-3">Our brand</span>
-            </div>
-        </div>
-    </footer>
 </template>
 
 <script>
@@ -323,21 +159,54 @@ export default {
 </script>
 
 <script setup>
-import { ref, onMounted, watch, computed } from "vue";
+import { ref, onMounted, onBeforeUnmount, watch, computed } from "vue";
 import axios from "axios";
+import { useRouter } from "vue-router";
 
-// Cart state (reactive)
+// State
 const products = ref([]);
-
-console.log(products); 
-
-const limit = 3;
-const limit2 = 4;
-const limitedProducts = computed(() => products.value.slice(0, limit));
-const limitedpopProducts = computed(() => products.value.slice(0, limit2));
-
 const cart = ref([]);
+const currentIndex = ref(0);
+const router = useRouter();
 
+// Limiting product displays
+const limitedProducts = computed(() => products.value.slice(0, 3));
+const limitedpopProducts = computed(() => products.value.slice(0, 4));
+
+// Carousel control
+function nextSlide() {
+    if (currentIndex.value < products.value.length - 1) currentIndex.value++;
+}
+
+function prevSlide() {
+    if (currentIndex.value > 0) currentIndex.value--;
+}
+
+// Cart management
+function addToCart(product) {
+ 
+  const existing = cart.value.find((p) => p.id === product.id);
+  if (!existing) {
+    cart.value.push({ ...product, quantity: 1 });
+  } else {
+    existing.quantity++;
+  }
+ 
+  localStorage.setItem("cart", JSON.stringify(cart.value));
+}
+
+
+function removeFromCart(productId) {
+    cart.value = cart.value.filter((p) => p.id !== productId);
+    localStorage.setItem("cart", JSON.stringify(cart.value));
+}
+
+// Shop navigation
+function goToShop() {
+    router.push("/shop");
+}
+
+// On mount
 onMounted(async () => {
     try {
         const response = await axios.get("http://localhost:3000/products");
@@ -346,101 +215,39 @@ onMounted(async () => {
         const productsWithImages = await Promise.all(
             fetchedProducts.map(async (product) => {
                 try {
-                    const res = await axios.get(
-                        `http://localhost:3000/uploads/${product.id}`,
-                    );
-                    // Dacă există cel puțin o imagine, ia doar prima
-                    const firstImage =
-                        res.data.length > 0 ? res.data[0].image : null;
+                    const res = await axios.get(`http://localhost:3000/uploads/${product.id}`);
+                    const firstImage = res.data.length > 0 ? res.data[0].image : null;
                     product.image = firstImage
                         ? `http://localhost:3000/uploads/${firstImage}`
                         : null;
                 } catch (err) {
-                    console.error(
-                        `Error fetching image for product ${product.id}:`,
-                        err,
-                    );
+                    console.error(`Error fetching image for product ${product.id}:`, err);
                     product.image = null;
                 }
                 return product;
-            }),
+            })
         );
 
-        products.value = productsWithImages
-       
-        products.value = productsWithImages
-    const savedCart = localStorage.getItem("cart");
-    if (savedCart) {
-        cart.value = JSON.parse(savedCart);
+        products.value = productsWithImages;
+
+        const savedCart = localStorage.getItem("cart");
+        if (savedCart) {
+            cart.value = JSON.parse(savedCart);
+        }
+    } catch (err) {
+        console.error("Error fetching products:", err);
     }
+});
 
-    onBeforeUnmount(() => {
-        products.value = [];
-    });
+// Persist cart
+watch(cart, (newCart) => {
+    localStorage.setItem("cart", JSON.stringify(newCart));
+}, { deep: true });
 
-    return {
-        products,
-    };
-}
-watch(
-    cart,
-    (newCart) => {
-        localStorage.setItem("cart", JSON.stringify(newCart));
-    },
-    { deep: true },
-);
-
-// Add product to cart
-function addToCart(product) {
-    const token = localStorage.getItem("token");
-    if (!token) {
-        alert("Trebuie să fii logat pentru a adăuga în coș.");
-        return;
-    }
-
-    const cartKey = `cart_${token}`;
-    const storedCart = JSON.parse(localStorage.getItem(cartKey)) || [];
-
-    const existing = storedCart.find((item) => item.id === product.id);
-    if (existing) {
-        existing.quantity++;
-    } else {
-        storedCart.push({ ...product, quantity: 1 });
-    }
-
-    localStorage.setItem(cartKey, JSON.stringify(storedCart));
-    console.log("Cart updated:", storedCart);
-    window.location.reload();
-}
-
-// Carousel logic
-const carousel = ref(null);
-let currentIndex = 0;
-
-const prevSlide = () => {
-    if (currentIndex > 0) {
-        currentIndex--;
-        updateCarouselPosition();
-    }
-};
-
-const nextSlide = () => {
-    const maxIndex = 6 - 2; // total slides - visible items
-    if (currentIndex < maxIndex) {
-        currentIndex++;
-        updateCarouselPosition();
-    }
-};
-
-const updateCarouselPosition = () => {
-    const slideWidth = carousel.value.offsetWidth / 2; // assuming 2 visible slides
-    carousel.value.style.transform = `translateX(-${currentIndex * slideWidth}px)`;
-};
-
-// Button to go to shop
-function goToShop() {
-    window.location.href = "/catalogue";
-}
+// Cleanup
+onBeforeUnmount(() => {
+    products.value = [];
+});
 </script>
 
 <style>
@@ -494,9 +301,7 @@ function goToShop() {
 
 /* section2 */
 .section2 {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    grid-template-rows: repeat(2, 1fr);
+   
     padding: 10px;
     margin-right: 10vh;
     margin-left: 10vh;
@@ -517,12 +322,13 @@ function goToShop() {
 }
 
 .newProductsMain {
-    grid-column: span 4 / span 4;
-    grid-row-start: 2;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 1vw;
 }
 
 body {
@@ -562,7 +368,6 @@ body {
     flex-wrap: wrap;
     justify-content: center;
     gap: 1vw;
-    margin-top: 20px;
 }
 
 /* footer */
@@ -635,3 +440,5 @@ footer {
 
 
       
+
+

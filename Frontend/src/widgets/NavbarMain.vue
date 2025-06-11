@@ -16,6 +16,10 @@
           <li v-if="!isLoggedIn">
             <router-link to="/register" class="block py-2 px-3 text-black rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 hover:text-black md:dark:hover:text-blue-500 dark:hover:bg-transparent dark:border-gray-700">Register</router-link>
           </li>
+          <li v-if="isLoggedIn"> 
+            <router-link to="/login" class="block py-2 px-3 text-black rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 hover:text-black dark:hover:bg-transparent dark:border-gray-700">Log out</router-link>
+
+          </li>
         </ul>
       </div>
 
