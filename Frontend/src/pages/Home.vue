@@ -1,8 +1,6 @@
 <template>
     <div class="all">
         <Navbar />
-        <ProductList @add-to-cart="addToCart" />
-        <Cart :items="cart" @remove-item="removeFromCart" />
 
         <!-- Carousel Section -->
         <div class="section1">
@@ -16,7 +14,9 @@
                 <div
                     ref="carousel"
                     class="flex transition-transform duration-300 ease-in-out"
-                    :style="{ transform: `translateX(-${currentIndex * 100}%)` }"
+                    :style="{
+                        transform: `translateX(-${currentIndex * 100}%)`,
+                    }"
                 >
                     <div
                         v-for="(product, index) in products.slice(0, 6)"
@@ -41,10 +41,19 @@
                         class="bg-white mr-20 hover:bg-gray-100 text-gray-800 font-semibold py-1 px-3 border border-gray-400 rounded shadow"
                     >
                         <span class="mr-5">Go To Shop</span>
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
-                             viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                  stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            class="h-5 w-5"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M14 5l7 7m0 0l-7 7m7-7H3"
+                            />
                         </svg>
                     </button>
                     <button
@@ -64,13 +73,15 @@
         </div>
 
         <!-- New Products -->
-        <div class="section2 ">
+        <div class="section2 mt-30">
             <div class="newProducts px-1 flex justify-between items-center">
                 <h1 class="text-4xl m-0 p-0">New Products</h1>
                 <router-link to="/" class="seeMoreLink">See More</router-link>
             </div>
 
-            <div class="newProductsMain mt-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+            <div
+                class="newProductsMain mt-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4"
+            >
                 <div
                     v-for="product in limitedProducts"
                     :key="product.id"
@@ -82,12 +93,16 @@
                         class="p-8 rounded-t-lg bg-gray-50 object-contain h-64 w-full"
                         alt="product image"
                     />
-                    <div class="px-5 pb-5">
-                        <h5 class="text-xl font-semibold tracking-tight text-gray-900">
+                    <div class="px-5 pb-5 mt-3">
+                        <h5
+                            class="text-xl font-semibold tracking-tight text-gray-900"
+                        >
                             {{ product.name }}
                         </h5>
-                        <div class="flex items-center justify-between mt-2">
-                            <span class="text-3xl font-bold text-gray-900">
+                        <div
+                            class="flex items-center justify-between mt-2 gap-4"
+                        >
+                            <span class="text-2xl font-bold text-gray-900">
                                 {{ product.price }} MDL
                             </span>
                             <button
@@ -104,8 +119,12 @@
 
         <!-- Most Popular Products -->
         <div class="mostPopular mt-30 mx-4">
-            <h2 class="text-5xl font-bold mx-20 mb-12">Our Most Popular Products</h2>
-            <div class="popularProductsMain grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+            <h2 class="text-5xl font-bold mx-20 mb-12">
+                Our Most Popular Products
+            </h2>
+            <div
+                class="popularProductsMain grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4"
+            >
                 <div
                     v-for="product in limitedpopProducts"
                     :key="product.id"
@@ -116,11 +135,15 @@
                         class="p-8 bg-gray-50 rounded-t-lg h-64 w-full object-contain"
                         alt="product image"
                     />
-                    <div class="px-5 pb-5">
-                        <h5 class="text-xl font-semibold tracking-tight text-black">
+                    <div class="px-5 pb-5 mt-3">
+                        <h5
+                            class="text-xl font-semibold tracking-tight text-black"
+                        >
                             {{ product.name }}
                         </h5>
-                        <div class="flex items-center justify-between mt-2">
+                        <div
+                            class="flex items-center justify-between mt-2 gap-4"
+                        >
                             <span class="text-3xl font-bold text-black">
                                 {{ product.price }} MDL
                             </span>
@@ -185,16 +208,22 @@ function prevSlide() {
 
 // Cart management
 function addToCart(product) {
+    const token = localStorage.getItem("token");
+    const cartKey = token ? `cart_${token}` : "cart_guest";
+
     const existing = cart.value.find((p) => p.id === product.id);
     if (!existing) {
         cart.value.push({ ...product, quantity: 1 });
     } else {
         existing.quantity++;
     }
+
+    localStorage.setItem(cartKey, JSON.stringify(cart.value));
 }
 
 function removeFromCart(productId) {
     cart.value = cart.value.filter((p) => p.id !== productId);
+    localStorage.setItem("cart", JSON.stringify(cart.value));
 }
 
 // Shop navigation
@@ -211,17 +240,23 @@ onMounted(async () => {
         const productsWithImages = await Promise.all(
             fetchedProducts.map(async (product) => {
                 try {
-                    const res = await axios.get(`http://localhost:3000/uploads/${product.id}`);
-                    const firstImage = res.data.length > 0 ? res.data[0].image : null;
+                    const res = await axios.get(
+                        `http://localhost:3000/uploads/${product.id}`,
+                    );
+                    const firstImage =
+                        res.data.length > 0 ? res.data[0].image : null;
                     product.image = firstImage
                         ? `http://localhost:3000/uploads/${firstImage}`
                         : null;
                 } catch (err) {
-                    console.error(`Error fetching image for product ${product.id}:`, err);
+                    console.error(
+                        `Error fetching image for product ${product.id}:`,
+                        err,
+                    );
                     product.image = null;
                 }
                 return product;
-            })
+            }),
         );
 
         products.value = productsWithImages;
@@ -236,9 +271,13 @@ onMounted(async () => {
 });
 
 // Persist cart
-watch(cart, (newCart) => {
-    localStorage.setItem("cart", JSON.stringify(newCart));
-}, { deep: true });
+watch(
+    cart,
+    (newCart) => {
+        localStorage.setItem("cart", JSON.stringify(newCart));
+    },
+    { deep: true },
+);
 
 // Cleanup
 onBeforeUnmount(() => {
@@ -297,9 +336,6 @@ onBeforeUnmount(() => {
 
 /* section2 */
 .section2 {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    grid-template-rows: repeat(2, 1fr);
     padding: 10px;
     margin-right: 10vh;
     margin-left: 10vh;
@@ -320,8 +356,10 @@ onBeforeUnmount(() => {
 }
 
 .newProductsMain {
-    grid-column: span 4 / span 4;
-    grid-row-start: 2;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
@@ -394,45 +432,31 @@ footer {
     grid-row-start: 1;
 }
 
-
 /* Carousel images */
 .colImages .image {
-  width: 100%;       /* full width of parent */
-  height: 450px;     /* fixed height */
-  overflow: hidden;  /* crop overflow */
+    width: 100%; /* full width of parent */
+    height: 450px; /* fixed height */
+    overflow: hidden; /* crop overflow */
 }
 
 .colImages img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover; /* cover area without stretching */
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* cover area without stretching */
 }
 
 /* Product list images (New Products & Most Popular) */
 .newProductsMain img,
 .popularProductsMain img {
-  width: 100%;
-  height: 350px;      /* fixed height */
-  object-fit: cover;  /* maintain aspect ratio and crop */
-  border-radius: 0.5rem; /* rounded corners matching your design */
-  background-color: #f9fafb; /* fallback bg for images with transparency */
-} 
+    width: 100%;
+    height: 350px; /* fixed height */
+    object-fit: cover; /* maintain aspect ratio and crop */
+    border-radius: 0.5rem; /* rounded corners matching your design */
+    background-color: #f9fafb; /* fallback bg for images with transparency */
+}
 
 .newProductsMain img,
 .popularProductsMain img {
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* subtle shadow effect */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* subtle shadow effect */
 }
-
-
-
-
 </style>
-
-
-
-
-
-
-
-
-      
