@@ -96,7 +96,7 @@ const placeOrder = async () => {
     }
 
     const orderPayload = cart.value.map(item => ({
-        token: token,
+        userId: token,
         productId: item.id,
         quantity: item.quantity,
     }));
@@ -128,3 +128,4 @@ const placeOrder = async () => {
 </script>
 
 <style></style>
+
