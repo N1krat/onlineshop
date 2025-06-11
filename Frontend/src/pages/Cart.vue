@@ -3,9 +3,7 @@
         <navbar></navbar>
 
         <div class="grid grid-cols-3 grid-rows-1 gap-3">
-            <div
-                class="main col-span-2 p-12 mr-10 mt-2 mx-10 bg-gray-300 shadow-md shadow-gray-400"
-            >
+            <div class="main col-span-2 p-12 mr-10 mt-2 mx-10 bg-gray-300 shadow-md shadow-gray-400">
                 <div class="col-span-3">
                     <h1 class="text-4xl font-bold">Products in your cart</h1>
                 </div>
@@ -22,19 +20,20 @@
                 </div>
             </div>
 
-            <div
-                class="checkOut p-12 mr-10 mt-2 bg-gray-300 shadow-md shadow-gray-400"
-            >
+            <div class="checkOut p-12 mr-10 mt-2 bg-gray-300 shadow-md shadow-gray-400">
                 <h1 class="text-4xl font-bold">Your checkout</h1>
                 <p>Total price: {{ totalPrice }} $</p>
                 <p>Total items: {{ cart.reduce((sum, item) => sum + item.quantity, 0) }}</p>
                 <br/>
-                
+
                 <p v-for="item in cart">{{ item.quantity }} x {{ item.name }}</p>
-        
 
-                <button class="bg-green-500 text-white rounded-lg p-2 mt-4 hover:bg-green-600 transition">Proceed to Checkout</button>
-
+                <button
+                    @click="placeOrder"
+                    class="bg-green-500 text-white rounded-lg p-2 mt-4 hover:bg-green-600 transition"
+                >
+                    Proceed to Checkout
+                </button>
             </div>
         </div>
     </div>
@@ -57,7 +56,7 @@ import { ref, onMounted, computed, watch } from "vue";
 const cart = ref([]);
 const cartKey = ref("");
 const totalPrice = computed(() =>
-    cart.value.reduce((sum, item) => sum + item.price * item.quantity, 0),
+    cart.value.reduce((sum, item) => sum + item.price * item.quantity, 0)
 );
 
 onMounted(() => {
@@ -68,6 +67,7 @@ onMounted(() => {
     } else {
         cartKey.value = "cart_guest";
     }
+
     localStorage.setItem("cartKey", cartKey.value);
 
     const savedCart = localStorage.getItem(cartKey.value);
@@ -84,8 +84,47 @@ watch(
             localStorage.setItem(cartKey.value, JSON.stringify(newCart));
         }
     },
-    { deep: true },
+    { deep: true }
 );
+
+const placeOrder = async () => {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+        alert("Trebuie să fii logat pentru a face o comandă.");
+        return;
+    }
+
+    const orderPayload = cart.value.map(item => ({
+        token: token,
+        productId: item.id,
+        quantity: item.quantity,
+    }));
+
+    try {
+        const response = await fetch("http://localhost:3000/orders", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(orderPayload),
+        });
+
+        if (!response.ok) {
+            const error = await response.text();
+            throw new Error(error);
+        }
+
+        // Order success — clear cart
+        localStorage.removeItem(cartKey.value);
+        cart.value = [];
+        alert("Comanda a fost trimisă cu succes!");
+
+    } catch (err) {
+        console.error("❌ Eroare la trimiterea comenzii:", err);
+        alert("A apărut o eroare la trimiterea comenzii. Încearcă din nou.");
+    }
+};
 </script>
 
 <style></style>
