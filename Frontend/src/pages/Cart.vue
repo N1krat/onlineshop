@@ -104,13 +104,17 @@ const placeOrder = async () => {
         return;
     }
 
-    const orderPayload = cart.value.map((item) => ({
-        userId: token,
-        productId: item.id,
-        quantity: item.quantity,
-    }));
+    const orderPayload = {
+        userToken: token,
+        items: cart.value.map((item) => ({
+            productId: item.id,
+            quantity: item.quantity,
+        })),
+    };
 
     try {
+        console.log("Order payload:", orderPayload);
+
         const response = await fetch("http://localhost:3000/orders", {
             method: "POST",
             headers: {
@@ -124,15 +128,17 @@ const placeOrder = async () => {
             throw new Error(error);
         }
 
-        // Order success — clear cart
         localStorage.removeItem(cartKey.value);
-        cart.value = [];
+        localStorage.removeItem("cart");
+
         alert("Comanda a fost trimisă cu succes!");
+        window.location.reload();
     } catch (err) {
         console.error("❌ Eroare la trimiterea comenzii:", err);
         alert("A apărut o eroare la trimiterea comenzii. Încearcă din nou.");
     }
 };
+
 </script>
 
 <style></style>

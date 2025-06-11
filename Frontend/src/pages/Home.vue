@@ -219,6 +219,7 @@ function addToCart(product) {
     }
 
     localStorage.setItem(cartKey, JSON.stringify(cart.value));
+    window.location.reload();
 }
 
 function removeFromCart(productId) {

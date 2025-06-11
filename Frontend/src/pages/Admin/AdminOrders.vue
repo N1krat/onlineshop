@@ -8,26 +8,26 @@
             <thead class="text-xs text-gray-700 uppercase bg-gray-50">
                 <tr>
                     <th scope="col" class="px-6 py-3">Order ID</th>
-                    <th scope="col" class="px-6 py-3">User ID</th>
-                    <th scope="col" class="px-6 py-3">Product ID</th>
+                    <th scope="col" class="px-6 py-3">User</th>
+                    <th scope="col" class="px-6 py-3">Product</th>
                     <th scope="col" class="px-6 py-3">Quantity</th>
-                    <th scope="col" class="px-6 py-3">Actions</th>
+                    <th scope="col" class="px-6 py-3">Status</th>
                 </tr>
             </thead>
             <tbody>
                 <tr
                     class="odd:bg-white even:bg-gray-50 border-b border-gray-200"
                     v-for="order in orders"
-                    :key="order.id"
+                    :key="order.order_id"
                 >
                     <th
                         scope="row"
                         class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
                     >
-                        {{ order.id }}
+                        {{ order.order_id }}
                     </th>
-                    <td class="px-6 py-4">{{ order.user_id }}</td>
-                    <td class="px-6 py-4">{{ order.product_id }}</td>
+                    <td class="px-6 py-4">{{ order.username }}</td>
+                    <td class="px-6 py-4">{{ order.product_name }}</td>
                     <td class="px-6 py-4">{{ order.quantity }}</td>
 
                     <td class="px-6 py-4">
@@ -62,12 +62,12 @@ export default {
     },
     mounted() {
         axios
-            .get("http://localhost:3000/orders")
+            .get("http://localhost:3000/orders/extended")
             .then((response) => {
                 this.orders = response.data;
             })
             .catch((error) => {
-                console.error(error);
+                console.error("Failed to fetch extended orders:", error);
             });
     },
     methods: {
@@ -85,15 +85,12 @@ export default {
         },
         updateOrderStatus(order) {
             console.log("Updating order:", order);
-            console.log("Order ID:", order?.id);
-            console.log("Action:", order?.action);
-
             axios
-                .put(`http://localhost:3000/orders/${order.id}`, {
+                .put(`http://localhost:3000/orders/${order.order_id}`, {
                     action: order.action,
                 })
                 .then(() => {
-                    console.log(`Order ${order.id} updated successfully.`);
+                    console.log(`Order ${order.order_id} updated successfully.`);
                 })
                 .catch((error) => {
                     console.error("Failed to update order:", error);

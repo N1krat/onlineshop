@@ -408,32 +408,77 @@ app.get("/uploads/:productId", (req, res) => {
 });
 
 // Exemplu simplu de verificare token
-app.get("/protected", (req, res) => {
-  const token = req.headers.authorization;
-  const user = db.prepare("SELECT * FROM users WHERE token = ?").get(token);
-  if (!user) return res.status(401).send("Unauthorized");
-  res.send("Access granted");
-});
-
-
-// creaza order
 app.post("/orders", (req, res) => {
-  const { userId, productId, quantity } = req.body;
-  const action = 0; // Default action value
+  const { userToken, items } = req.body;
+
+  if (!userToken || !Array.isArray(items) || items.length === 0) {
+    return res.status(400).json({ error: "Missing order data" });
+  }
 
   try {
+    const user = db.prepare("SELECT id FROM users WHERE token = ?").get(userToken);
+    if (!user) return res.status(400).json({ error: "Invalid user token" });
+
     const stmt = db.prepare(
       "INSERT INTO orders (user_id, product_id, quantity, action) VALUES (?, ?, ?, ?)"
     );
-    stmt.run(userId, productId, quantity, action);
-    res.status(201).send("Order created successfully");
+
+    const insertMany = db.transaction((items) => {
+      for (const item of items) {
+        const { productId, quantity } = item;
+        stmt.run(user.id, productId, quantity, 'ordered');
+      }
+    });
+
+    insertMany(items);
+
+    res.status(201).json({ message: "Order created successfully" });
   } catch (err) {
-    console.error(err);
-    res.status(500).send("Database error during order creation");
+    console.error("DB error:", err);
+    res.status(500).json({ error: "Database error during order creation" });
   }
 });
+
+
+
+
 
 const port = process.env.PORT || 3000;
 app.listen(port, () =>
   console.log(`Server running on http://localhost:${port}`),
 );
+
+// loads orders for a specific user
+app.get("/orders/:userId", (req, res) => {
+  const userId = parseInt(req.params.userId);
+
+  if (isNaN(userId)) {
+    return res.status(400).send("Invalid user ID");
+  }
+
+  try {
+    const stmt = db.prepare("SELECT * FROM orders WHERE user_id = ?");
+    const orders = stmt.all(userId);
+    res.json(orders);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Database error");
+  }
+});
+app.get("/users/:username", (req, res) => {
+  const username = req.params.username;
+
+  try {
+    const stmt = db.prepare("SELECT id from users WHERE username = ?");
+    const user = stmt.get(username);
+
+    if (user) {
+      res.json(user);
+    } else {
+      res.status(404).send("User not found");
+    }
+  } catch (err) {
+    console.error("DB error:", err);
+    res.status(500).send("Database error");
+  }
+});

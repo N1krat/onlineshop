@@ -1,7 +1,7 @@
 <template>
   <nav class="p-1">
     <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4 ">
-      <img src="https://placehold.co/75x75">
+      <img src="/public/vite.svg" class="w-16 h-16">
       <div class="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white dark:bg-transparent">
         <ul class="flex flex-col p-2 mt-2 font-medium border border-gray-100 rounded-full md:flex-row md:gap-2 md:mt-0 md:border-0 md:bg-white dark:bg-transparent dark:border-gray-700">
           <li>
@@ -34,6 +34,18 @@
 
       <ul class="flex flex-col p-2 mt-2 font-medium border border-gray-100 rounded-full md:flex-row md:gap-2 md:mt-0 md:border-0">
         <li>
+          <button @click="toggleDarkMode" 
+                  class="bg-gray-800 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-full cursor-pointer flex items-center justify-center">
+            <svg v-if="!isDark" class="w-6 h-6">
+              ☀️
+            </svg>
+          
+            <svg v-else class="w-6 h-6">
+              🌙
+            </svg>
+          </button>
+        </li>
+        <li>
           <button @click="openCart" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full flex items-center justify-center cursor-pointer">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6 mr-2">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
@@ -63,13 +75,34 @@ export default {
 </script>
 
 <script setup>
-import { ref, onMounted, computed, watch } from "vue";
+import { ref, onMounted, watch } from "vue";
 
 const isLoggedIn = ref(false);
 const cart = ref([]);
 const cartKey = ref("");
 
+// Dark mode reactive state
+const isDark = ref(false);
+
+// Aplica clasa dark pe <html>
+function applyDarkMode(isDarkMode) {
+  const htmlEl = document.documentElement;
+  if (isDarkMode) {
+    htmlEl.classList.add("dark");
+  } else {
+    htmlEl.classList.remove("dark");
+  }
+}
+
+// Toggle dark mode și salvează în localStorage
+function toggleDarkMode() {
+  isDark.value = !isDark.value;
+  applyDarkMode(isDark.value);
+  localStorage.setItem("darkMode", isDark.value ? "true" : "false");
+}
+
 onMounted(() => {
+  // Verificare token și cart
   const token = localStorage.getItem("token");
   if (token) {
     isLoggedIn.value = true;
@@ -79,10 +112,18 @@ onMounted(() => {
   }
 
   localStorage.setItem("cartKey", cartKey.value);
+
   const savedCart = localStorage.getItem(cartKey.value);
   if (savedCart) {
     cart.value = JSON.parse(savedCart);
     console.log("📦 Cart loaded from localStorage:", cart.value);
+  }
+
+  // Aplică dark mode din localStorage la încărcare
+  const savedDarkMode = localStorage.getItem("darkMode");
+  if (savedDarkMode === "true") {
+    isDark.value = true;
+    applyDarkMode(true);
   }
 });
 
@@ -116,6 +157,3 @@ function userProfile() {
   window.location.href = "/login";
 }
 </script>
-
-<style scoped>
-</style>
