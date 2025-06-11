@@ -3,7 +3,9 @@
         <navbar></navbar>
 
         <div class="grid grid-cols-3 grid-rows-1 gap-3">
-            <div class="main col-span-2 p-12 mr-10 mt-2 mx-10 bg-gray-300 shadow-md shadow-gray-400">
+            <div
+                class="main col-span-2 p-12 mr-10 mt-2 mx-10 bg-gray-300 shadow-md shadow-gray-400"
+            >
                 <div class="col-span-3">
                     <h1 class="text-4xl font-bold">Products in your cart</h1>
                 </div>
@@ -20,13 +22,20 @@
                 </div>
             </div>
 
-            <div class="checkOut p-12 mr-10 mt-2 bg-gray-300 shadow-md shadow-gray-400">
+            <div
+                class="checkOut p-12 mr-10 mt-2 bg-gray-300 shadow-md shadow-gray-400"
+            >
                 <h1 class="text-4xl font-bold">Your checkout</h1>
                 <p>Total price: {{ totalPrice }} $</p>
-                <p>Total items: {{ cart.reduce((sum, item) => sum + item.quantity, 0) }}</p>
-                <br/>
+                <p>
+                    Total items:
+                    {{ cart.reduce((sum, item) => sum + item.quantity, 0) }}
+                </p>
+                <br />
 
-                <p v-for="item in cart">{{ item.quantity }} x {{ item.name }}</p>
+                <p v-for="item in cart">
+                    {{ item.quantity }} x {{ item.name }}
+                </p>
 
                 <button
                     @click="placeOrder"
@@ -56,7 +65,7 @@ import { ref, onMounted, computed, watch } from "vue";
 const cart = ref([]);
 const cartKey = ref("");
 const totalPrice = computed(() =>
-    cart.value.reduce((sum, item) => sum + item.price * item.quantity, 0)
+    cart.value.reduce((sum, item) => sum + item.price * item.quantity, 0),
 );
 
 onMounted(() => {
@@ -84,7 +93,7 @@ watch(
             localStorage.setItem(cartKey.value, JSON.stringify(newCart));
         }
     },
-    { deep: true }
+    { deep: true },
 );
 
 const placeOrder = async () => {
@@ -95,7 +104,7 @@ const placeOrder = async () => {
         return;
     }
 
-    const orderPayload = cart.value.map(item => ({
+    const orderPayload = cart.value.map((item) => ({
         userId: token,
         productId: item.id,
         quantity: item.quantity,
@@ -119,7 +128,6 @@ const placeOrder = async () => {
         localStorage.removeItem(cartKey.value);
         cart.value = [];
         alert("Comanda a fost trimisă cu succes!");
-
     } catch (err) {
         console.error("❌ Eroare la trimiterea comenzii:", err);
         alert("A apărut o eroare la trimiterea comenzii. Încearcă din nou.");
@@ -128,4 +136,3 @@ const placeOrder = async () => {
 </script>
 
 <style></style>
-

@@ -459,4 +459,8 @@ footer {
 .popularProductsMain img {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* subtle shadow effect */
 }
+<<<<<<< HEAD
 </style>
+=======
+</style>
+>>>>>>> ba9b5d1ab34da8b0d6d96c014501070f13abae0b
