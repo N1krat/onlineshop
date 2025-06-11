@@ -53,43 +53,51 @@
 </template>
 
 <script>
-  import Navbar from "../../widgets/NavbarReg.vue";
-  import axios from "axios";
+import Navbar from "../../widgets/NavbarReg.vue";
+import axios from "axios";
 
-  export default {
-    name: "LoginPage",
-    components: {
-      Navbar,
-    },
-    data() {
-      return {
-        username: "",
-        password: "",
-        errorMessage: "",
-      };
-    },
-    methods: {
-      async loginUser() {
-        this.errorMessage = "";
-        try {
-          const response = await axios.post("http://localhost:3000/login", {
-            username: this.username,
-            password: this.password,
-          });
-          console.log("Login response:", response.data);
-          localStorage.setItem("token", response.data.token);
+export default {
+  name: "LoginPage",
+  components: {
+    Navbar,
+  },
+  data() {
+    return {
+      username: "",
+      password: "",
+      errorMessage: "",
+    };
+  },
+  methods: {
+    async loginUser() {
+      this.errorMessage = "";
+      try {
+        const response = await axios.post("http://localhost:3000/login", {
+          username: this.username,
+          password: this.password,
+        });
+        console.log("Login response:", response.data);
 
-          localStorage.setItem(
-            "user",
-            JSON.stringify({ username: this.username })
-          );
+        // Save token
+        localStorage.setItem("token", response.data.token);
 
-          alert("Login Successful!");
-          this.$router.push("/user");
-        } catch (error) {
-          this.errorMessage = error.response?.data?.message || "Login failed";
+        // Save user with 'name' key for consistency with Navbar
+        localStorage.setItem(
+          "user",
+          JSON.stringify({ name: this.username })
+        );
+
+        alert("Login Successful!");
+
+        if (this.username === "admin" && this.password === "admin") {
+          this.$router.push("/admin");
+        } else {
+          this.$router.push("/user/" + this.username);
         }
-      },
+      } catch (error) {
+        this.errorMessage = error.response?.data?.message || "Login failed";
+      }
     },
-  };
+  },
+};
 </script>

@@ -8,7 +8,7 @@
         <!-- Main collections -->
         <div class="section1">
             <div class="newCol p-3">
-                <h1 class="text-6xl">New Devices</h1>
+                <h1 class="text-6xl">New Products</h1>
                 <p class="text-l" id="p1">Spring</p>
                 <p class="text-l" id="p2">2025</p>
             </div>
@@ -21,7 +21,7 @@
                     <div class="colImages min-w-1/2 px-2">
                         <div class="image">
                             <img
-                                src="../assets/images/iphone16.png"
+                                :src="products[0]?.images?.[0]"
                                 alt="placeholder image"
                                 class="w-full h-full object-cover"
                             />
@@ -30,6 +30,7 @@
                     <div class="colImages min-w-1/2 px-2">
                         <div class="image h-[270px]">
                             <img
+                                :src="products[1]?.images?.[0]"
                                 src="../assets/images/macbook.jpg"
                                 alt="placeholder image"
                                 class="w-full h-full object-cover"
@@ -40,6 +41,7 @@
                     <div class="colImages min-w-1/2 px-2">
                         <div class="image">
                             <img
+                                :src="products[2]?.images?.[0]"
                                 src="../assets/images/iphone16.png"
                                 alt="placeholder image"
                                 class="w-full h-full object-cover"
@@ -49,6 +51,7 @@
                     <div class="colImages min-w-1/2 px-2">
                         <div class="image">
                             <img
+                                :src="products[3]?.images?.[0]"
                                 src="../assets/images/macbook.jpg"
                                 alt="placeholder image"
                                 class="w-full h-full object-cover"
@@ -58,6 +61,7 @@
                     <div class="colImages min-w-1/2 px-2">
                         <div class="image">
                             <img
+                                :src="products[4]?.images?.[0]"
                                 src="../assets/images/iphone16.png"
                                 alt="placeholder image"
                                 class="w-full h-full object-cover"
@@ -67,6 +71,7 @@
                     <div class="colImages min-w-1/2 px-2">
                         <div class="image">
                             <img
+                                :src="products[5]?.images?.[0]"
                                 src="../assets/images/macbook.jpg"
                                 alt="placeholder image"
                                 class="w-full h-full object-cover"
@@ -144,6 +149,43 @@
                 <router-link to="/" class="seeMoreLink">See More</router-link>
             </div>
 
+<<<<<<< HEAD
+            <div class="newProductsMain" style="margin-top: -12vh">
+                
+                <div
+                    v-for="product in products.slice(0, 3)"
+                    :key="product.id"
+                    class="w-full max-w-sm rounded-lg dark:border-gray-700"
+                >
+                    <a href="#">
+                        <img
+                            v-if="product.images && product.images[0]"
+                            :src="product.images[0]"
+                            class="p-8 mb-6 rounded-t-lg bg-gray-50"
+                            alt="product image"
+                        />
+                    </a>
+                    <div class="px-5 pb-5">
+                        <a href="#">
+                            <h5
+                            >
+                                {{ product.name }}
+                            </h5>
+                        </a>
+                        <br />
+                        <div class="flex items-center justify-between">
+                            <span
+                                class="text-3xl font-bold text-black dark:text-black"
+                                >{{ product.price }} MDL</span
+                            >
+                            <button
+                                @click="addToCart(product)"
+                                href="#"
+                                class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                            >
+                                Add to cart
+                            </button>
+=======
             <div class="products p-2 w-full">
                 <div
                     v-for="product in limitedProducts"
@@ -180,9 +222,11 @@
                                     Add to cart
                                 </router-link>
                             </div>
+>>>>>>> 1d9c3d0e9650454260b917a8229c3bbbeda60f11
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
 
@@ -192,6 +236,11 @@
             </h2>
 
             <div class="popularProductsMain" style="margin-top: -12vh">
+<<<<<<< HEAD
+                
+
+=======
+>>>>>>> 1d9c3d0e9650454260b917a8229c3bbbeda60f11
                 <div
                     v-for="product in limitedpopProducts"
                     :key="product.id"
@@ -199,12 +248,20 @@
                 >
                     <a href="#">
                         <img
+<<<<<<< HEAD
+                            :src="product.images[0]"
+                            class="p-8 mb-6 rounded-t-lg bg-gray-50"
+                            alt="product image"
+                        />
+                    </a>                    <div class="px-5 pb-5">
+=======
                             class="p-8 rounded-t-lg bg-gray-50"
                             :src="product.image"
                             alt="product image"
                         />
                     </a>
                     <div class="px-5 pb-5">
+>>>>>>> 1d9c3d0e9650454260b917a8229c3bbbeda60f11
                         <a href="#">
                             <h5
                                 class="text-xl font-semibold tracking-tight text-black dark:text-black"
@@ -216,7 +273,7 @@
                         <div class="flex items-center justify-between">
                             <span
                                 class="text-3xl font-bold text-black dark:text-black"
-                                >{{ product.price }}</span
+                                >{{ product.price }} MDL</span
                             >
                             <a
                                 href="#"
@@ -228,6 +285,18 @@
                 </div>
             </div>
         </div>
+<<<<<<< HEAD
+
+        <footer class="mt-20">
+            <div class="footerDivs p-6">
+                <div class="info text-xl p-3">Info</div>
+                <div class="links text-xl p-3">Email: Platforma</div>
+                <div class="contact text-xl p-3">Contact: 034343334</div>
+                <div class="email text-xl p-3">Email: platforma@gmail.com</div>
+            </div>
+        </footer>
+=======
+>>>>>>> 1d9c3d0e9650454260b917a8229c3bbbeda60f11
     </div>
 
     <footer class="mt-20">
@@ -259,15 +328,35 @@ import axios from "axios";
 
 // Cart state (reactive)
 const products = ref([]);
+<<<<<<< HEAD
+console.log(products); 
+=======
 const limit = 3;
 const limit2 = 4;
 const limitedProducts = computed(() => products.value.slice(0, limit));
 const limitedpopProducts = computed(() => products.value.slice(0, limit2));
 
+>>>>>>> 1d9c3d0e9650454260b917a8229c3bbbeda60f11
 const cart = ref([]);
 
 onMounted(async () => {
     try {
+<<<<<<< HEAD
+        const response = await axios.get("http://localhost:3000/products");
+        products.value = response.data;
+        console.log("Products loaded:", products.value);
+
+        // Load product images
+        const imagePromises = products.value.map(async (product) => {
+            const res = await axios.get(`http://localhost:3000/uploads/${product.id}`);
+            const images = res.data.filter((img) => img.image);
+            product.images = images.map((img) => `http://localhost:3000/uploads/${img.image}`);
+            
+        });
+        await Promise.all(imagePromises);
+    } catch (err) {
+        console.error("Error fetching products:", err);
+=======
         const productResponse = await axios.get(
             "http://localhost:3000/products",
         );
@@ -299,6 +388,7 @@ onMounted(async () => {
         products.value = productsWithImages;
     } catch (error) {
         console.error("Error fetching products:", error);
+>>>>>>> 1d9c3d0e9650454260b917a8229c3bbbeda60f11
     }
     const savedCart = localStorage.getItem("cart");
     if (savedCart) {
@@ -523,4 +613,44 @@ footer {
     grid-column-start: 2;
     grid-row-start: 1;
 }
+
+
+/* Carousel images */
+.colImages .image {
+  width: 100%;       /* full width of parent */
+  height: 450px;     /* fixed height */
+  overflow: hidden;  /* crop overflow */
+}
+
+.colImages img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* cover area without stretching */
+}
+
+/* Product list images (New Products & Most Popular) */
+.newProductsMain img,
+.popularProductsMain img {
+  width: 100%;
+  height: 350px;      /* fixed height */
+  object-fit: cover;  /* maintain aspect ratio and crop */
+  border-radius: 0.5rem; /* rounded corners matching your design */
+  background-color: #f9fafb; /* fallback bg for images with transparency */
+} 
+
+.newProductsMain img,
+.popularProductsMain img {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* subtle shadow effect */
+}
+
+
+
+
 </style>
+
+
+
+
+
+
+

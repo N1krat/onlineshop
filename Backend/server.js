@@ -70,6 +70,8 @@ db.prepare(
       image TEXT,
       FOREIGN KEY (product_id) REFERENCES products(id)
   )`,
+
+
 ).run();
 
 app.post("/register", async (req, res) => {
@@ -98,7 +100,6 @@ app.post("/register", async (req, res) => {
     res.status(500).send("Database error");
   }
 });
-
 app.post("/login", (req, res) => {
   try {
     const { username, password } = req.body;
@@ -122,7 +123,8 @@ app.post("/login", (req, res) => {
     if (!passMatch) {
       return res.status(400).json({ error: "Invalid password" });
     }
-    res.json({ message: "Login Succesfull", token: user.token });
+
+    res.json({ message: "Login Successful", token: user.token, redirect: `/user/${username}` });
   } catch (err) {
     console.error("Error in /login:", err);
     res.status(500).json({ error: "Internal server error" });
@@ -249,6 +251,7 @@ app.delete("/products/:id", (req, res) => {
   }
 });
 
+
 // oders
 app.get("/orders", (req, res) => {
   try {
@@ -260,6 +263,33 @@ app.get("/orders", (req, res) => {
     res.status(500).send("Database error");
   }
 });
+
+app.get("/orders/extended", (req, res) => {
+  try {
+    const stmt = db.prepare(`
+      SELECT 
+        o.id AS order_id,
+        o.quantity,
+        o.action,
+        u.id AS user_id,
+        u.username,
+        u.email,
+        p.id AS product_id,
+        p.name AS product_name,
+        p.price,
+        p.description
+      FROM orders o
+      JOIN users u ON o.user_id = u.id
+      JOIN products p ON o.product_id = p.id
+    `);
+    const extendedOrders = stmt.all();
+    res.json(extendedOrders);
+  } catch (err) {
+    console.error("Database error:", err);
+    res.status(500).send("Failed to fetch extended orders");
+  }
+});
+
 
 app.put("/orders/:id", (req, res) => {
   const id = parseInt(req.params.id);
@@ -374,6 +404,32 @@ app.get("/uploads/:productId", (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).send("Database error");
+  }
+});
+
+// Exemplu simplu de verificare token
+app.get("/protected", (req, res) => {
+  const token = req.headers.authorization;
+  const user = db.prepare("SELECT * FROM users WHERE token = ?").get(token);
+  if (!user) return res.status(401).send("Unauthorized");
+  res.send("Access granted");
+});
+
+
+// creaza order
+app.post("/orders", (req, res) => {
+  const { userId, productId, quantity } = req.body;
+  const action = 0; // Default action value
+
+  try {
+    const stmt = db.prepare(
+      "INSERT INTO orders (user_id, product_id, quantity, action) VALUES (?, ?, ?, ?)"
+    );
+    stmt.run(userId, productId, quantity, action);
+    res.status(201).send("Order created successfully");
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Database error during order creation");
   }
 });
 
