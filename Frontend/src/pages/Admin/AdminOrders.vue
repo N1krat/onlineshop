@@ -1,6 +1,11 @@
 <template>
     <h1 class="text-2xl col-span-2 mx-10 font-bold">Orders</h1>
-
+    <button
+          @click="exportOrders"
+          class="mb-6 mr-6 inline-block py-1 px-2 text-sm font-medium text-white bg-blue-500 rounded hover:bg-blue-600"
+        >
+          Export
+        </button>
     <div
         class="relative overflow-x-auto shadow-md shadow-gray-400 sm:rounded-lg bg-white"
     >
@@ -95,6 +100,25 @@ export default {
                 .catch((error) => {
                     console.error("Failed to update order:", error);
                 });
+        },
+
+        exportOrders() {
+            const csvData = this.orders.map(order => ({
+                "Order ID": order.order_id,
+                "User": order.username,
+                "Product": order.product_name,
+                "Quantity": order.quantity,
+                "Status": order.action === 2 ? "Accepted" : order.action === 1 ? "Pending" : "Declined"
+            }));
+            const csvContent = [Object.keys(csvData[0]).join(","), ...csvData.map(e => Object.values(e).join(","))].join("\n");
+            const blob = new Blob([csvContent], { type: 'text/csv' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.setAttribute('download', 'orders.csv');
+            link.style.display = 'none';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
         },
     },
 };

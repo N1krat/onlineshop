@@ -1,7 +1,7 @@
 <template>
   <nav class="p-1">
     <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4 ">
-      <img src="https://placehold.co/75x75">
+      <img src="/public/vite.svg" class="w-16 h-16">
       <div class="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white dark:bg-transparent">
         
         <ul class="flex flex-col p-2 mt-2 font-medium border border-gray-100 rounded-full md:flex-row md:gap-2 md:mt-0 md:border-0 md:bg-white dark:bg-transparent dark:border-gray-700">
