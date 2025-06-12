@@ -1,9 +1,15 @@
 <template>
     <h1 class="text-2xl col-span-2 mx-10 font-bold">Users</h1>
-
+    <button
+          @click="exportUsers"
+          class="mb-5 mr-6 inline-block py-1 px-2 text-sm font-medium text-white bg-blue-500 rounded hover:bg-blue-600 justify-end gap-5"
+        >
+          Export
+        </button>
     <div
         class="relative overflow-x-auto shadow-md shadow-gray-400 sm:rounded-lg bg-white"
     >
+        
         <table class="w-full text-sm text-left rtl:text-right text-gray-700">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50">
                 <tr>
@@ -71,6 +77,17 @@ export default {
             }
         };
 
+        const exportUsers = () => {
+            const data = users.value.map(JSON.stringify).join("\n");
+            const blob = new Blob([data], { type: "application/json" });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            link.href = url;
+            link.download = "users.csv";
+            link.click();
+            URL.revokeObjectURL(url);
+        };
+
         onMounted(fetchUsers);
 
         watch(
@@ -84,6 +101,7 @@ export default {
         return {
             users,
             deleteUserFromDB,
+            exportUsers, 
         };
     },
 };

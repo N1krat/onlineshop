@@ -195,7 +195,7 @@ const router = useRouter();
 
 // Limiting product displays
 const limitedProducts = computed(() => products.value.slice(0, 3));
-const limitedpopProducts = computed(() => products.value.slice(0, 4));
+const limitedpopProducts = computed(() => products.value.slice(0, 3));
 
 // Carousel control
 function nextSlide() {
@@ -213,7 +213,7 @@ function addToCart(product) {
 
     const existing = cart.value.find((p) => p.id === product.id);
     if (!existing) {
-        cart.value.push({ ...product, quantity: 1 });
+        cart.value.push({ ...product, quantity: 1, image: product.image });
     } else {
         existing.quantity++;
     }
@@ -229,7 +229,7 @@ function removeFromCart(productId) {
 
 // Shop navigation
 function goToShop() {
-    router.push("/shop");
+    router.push("/catalogue");
 }
 
 // On mount
@@ -461,3 +461,5 @@ footer {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* subtle shadow effect */
 }
 </style>
+
+

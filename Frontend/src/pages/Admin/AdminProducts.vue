@@ -2,7 +2,13 @@
   <div>
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-4">
       <h1 class="text-2xl col-span-2 mx-10 font-bold">Our products</h1>
-      <div class="flex justify-end">
+      <div class="flex justify-end gap-5">
+        <button
+          @click="exportProducts"
+          class="mr-6 inline-block py-1 px-2 text-sm font-medium text-white bg-blue-500 rounded hover:bg-blue-600"
+        >
+          Export
+        </button>
         <button
           @click="showAddModal = true"
           class="mr-6 inline-block py-1 px-2 text-sm font-medium text-white bg-green-500 rounded hover:bg-green-600"
@@ -292,6 +298,31 @@ export default {
       }
     };
 
+    // 
+    const exportProducts = async () => {
+      const csvRows = [
+        ['id', 'name', 'price', 'category', 'description'],
+        ...products.value.map(product => [
+          product.id,
+          product.name,
+          product.price,
+          product.category,
+          product.description,
+        ]),
+      ];
+
+      const csvContent = csvRows.map(row => row.join(',')).join('\n');
+
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.setAttribute('download', 'products.csv');
+      link.style.visibility = 'hidden';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
     onMounted(() => {
       fetchProducts();
     });
@@ -310,7 +341,7 @@ export default {
       editedProduct,
       openEditModal,
       saveEditedData,
-
+      exportProducts, 
     };
   },
 };

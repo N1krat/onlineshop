@@ -15,7 +15,7 @@
                         v-for="item in cart"
                         :key="item.id"
                     >
-                        <img src="https://placehold.co/350x350" />
+                        <img :src="item.image" />
                         <h2>{{ item.name }}</h2>
                         <h3>{{ item.price }}</h3>
                     </div>
@@ -68,7 +68,7 @@ const totalPrice = computed(() =>
     cart.value.reduce((sum, item) => sum + item.price * item.quantity, 0),
 );
 
-onMounted(() => {
+onMounted(async () => {
     const token = localStorage.getItem("token");
 
     if (token) {
@@ -84,6 +84,15 @@ onMounted(() => {
         cart.value = JSON.parse(savedCart);
         console.log("📦 Cart loaded from localStorage:", cart.value);
     }
+
+    const products = await fetch("http://localhost:3000/products");
+    const productsJson = await products.json();
+    cart.value.forEach((item) => {
+        const product = productsJson.find((p) => p.id === item.id);
+        if (product) {
+            item.image = product.image;
+        }
+    });
 });
 
 watch(
@@ -142,3 +151,4 @@ const placeOrder = async () => {
 </script>
 
 <style></style>
+

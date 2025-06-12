@@ -87,13 +87,14 @@ export default {
           JSON.stringify({ name: this.username })
         );
 
-        alert("Login Successful!");
+       
 
         if (this.username === "admin" && this.password === "admin") {
           this.$router.push("/admin");
         } else {
           this.$router.push("/user/" + this.username);
         }
+        alert("Login Successful!");
       } catch (error) {
         this.errorMessage = error.response?.data?.message || "Login failed";
       }
