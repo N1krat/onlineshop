@@ -1,7 +1,7 @@
 <template>
     <div class="all">
         <Navbar />
-
+        <button @click="toggleDark"></button>
         <!-- Carousel Section -->
         <div class="section1">
             <div class="newCol p-3">
@@ -185,6 +185,7 @@ export default {
 <script setup>
 import { ref, onMounted, onBeforeUnmount, watch, computed } from "vue";
 import axios from "axios";
+import { useDarkMode } from "../features/useDarkMode";
 import { useRouter } from "vue-router";
 
 // State
@@ -192,6 +193,9 @@ const products = ref([]);
 const cart = ref([]);
 const currentIndex = ref(0);
 const router = useRouter();
+
+//Dark Mode
+const { isDark, toggleDark } = useDarkMode();
 
 // Limiting product displays
 const limitedProducts = computed(() => products.value.slice(0, 3));
@@ -461,5 +465,3 @@ footer {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* subtle shadow effect */
 }
 </style>
-
-
